@@ -28,7 +28,8 @@ export default function Header() {
     <header className="header">
       <div className="container">
         <div className="header__inner">
-          <Link to="/" className="header__logo">我的博客</Link>
+          <Link to="/" className="header__logo">拾光记
+          </Link>
 
           <button
             className="theme-toggle"
@@ -42,6 +43,7 @@ export default function Header() {
           <nav className="header__nav">
             <NavLink to="/" end>首页</NavLink>
             <NavLink to="/articles">文章</NavLink>
+            <NavLink to="/news">资讯</NavLink>
             <NavLink to="/about">关于</NavLink>
 
             <form onSubmit={handleSearch} className="search-bar" style={{ width: '160px' }}>

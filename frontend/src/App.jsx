@@ -9,6 +9,7 @@ import CategoryPage from './pages/CategoryPage';
 import TagPage from './pages/TagPage';
 import SearchResults from './pages/SearchResults';
 import About from './pages/About';
+import News from './pages/News';
 import NotFound from './pages/NotFound';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -28,6 +29,7 @@ export default function App() {
               <Route path="category/:slug" element={<CategoryPage />} />
               <Route path="tag/:slug" element={<TagPage />} />
               <Route path="search" element={<SearchResults />} />
+              <Route path="news" element={<News />} />
               <Route path="about" element={<About />} />
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />

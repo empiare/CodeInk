@@ -23,6 +23,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/comments").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/ai-news/crawl").permitAll()
                 .requestMatchers("/api/auth/login").permitAll()
                 .requestMatchers("/api/auth/register").permitAll()
                 .requestMatchers("/api/auth/google").permitAll()

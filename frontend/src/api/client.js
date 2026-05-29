@@ -37,7 +37,7 @@ client.interceptors.response.use(
       const { status, data } = error.response;
       if (status === 401) {
         localStorage.removeItem('token');
-        window.location.href = '/admin/login';
+        window.location.href = '/login';
       }
       return Promise.reject(data || error.message);
     }

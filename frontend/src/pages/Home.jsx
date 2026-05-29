@@ -10,6 +10,7 @@ export default function Home() {
   const [categories, setCategories] = useState([]);
   const [stats, setStats] = useState(null);
   const [featuredArticle, setFeaturedArticle] = useState(null);
+  const [aiNews, setAiNews] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,13 +19,15 @@ export default function Home() {
       client.get('/tags'),
       client.get('/categories'),
       client.get('/stats'),
-    ]).then(([articleRes, tagRes, catRes, statsRes]) => {
+      client.get('/ai-news/latest?limit=6').catch(() => []),
+    ]).then(([articleRes, tagRes, catRes, statsRes, aiNewsRes]) => {
       // client 拦截器已解包 ApiResponse，articleRes 直接是分页数据
       const articlesData = articleRes?.records || articleRes?.content || [];
       setArticles(articlesData);
       setTags(Array.isArray(tagRes) ? tagRes : []);
       setCategories(Array.isArray(catRes) ? catRes : []);
       setStats(statsRes || null);
+      setAiNews(Array.isArray(aiNewsRes) ? aiNewsRes : []);
 
       // 查找置顶文章
       const featured = articlesData.find(a => a.featured || a.isFeatured);
@@ -37,18 +40,10 @@ export default function Home() {
   }
 
   return (
-    <div className="container">
-      {/* Hero 区域 */}
-      <section className="hero">
-        <h1 className="hero__title">你好，欢迎来到我的博客</h1>
-        <p className="hero__desc">
-          这里记录我的技术学习笔记、项目经验和个人思考。
-        </p>
-      </section>
-
-      {/* 统计数据 */}
+    <main className="home-layout">
+      {/* 左侧统计栏 */}
       {stats && (
-        <section className="stats-grid">
+        <aside className="home-sidebar">
           <div className="stat-card">
             <div className="stat-card__value">{stats.articleCount}</div>
             <div className="stat-card__label">篇文章</div>
@@ -65,8 +60,17 @@ export default function Home() {
             <div className="stat-card__value">{stats.totalViews}</div>
             <div className="stat-card__label">次阅读</div>
           </div>
-        </section>
+        </aside>
       )}
+
+      <div className="container">
+        {/* Hero 区域 */}
+        <section className="hero">
+        <h1 className="hero__title">你好，欢迎来到拾光记</h1>
+        <p className="hero__desc">
+          这里记录我的技术学习笔记、项目经验和个人思考。
+        </p>
+      </section>
 
       {/* 精选文章 */}
       {featuredArticle && (
@@ -120,6 +124,33 @@ export default function Home() {
         <Link to="/articles" className="btn">查看全部文章</Link>
       </div>
 
+      {/* AI 资讯 */}
+      {aiNews.length > 0 && (
+        <section style={{ marginTop: '2.5rem' }}>
+          <h2 className="section-header">AI 资讯</h2>
+          <div className="ai-news-grid">
+            {aiNews.map(news => (
+              <a
+                key={news.id}
+                href={news.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ai-news-card"
+              >
+                <span className="ai-news-card__source">{news.sourceName}</span>
+                <h3 className="ai-news-card__title">{news.title}</h3>
+                {news.summary && (
+                  <p className="ai-news-card__summary">{news.summary}</p>
+                )}
+                <span className="ai-news-card__time">
+                  {news.publishedAt ? new Date(news.publishedAt).toLocaleDateString('zh-CN') : ''}
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* 标签 */}
       {tags.length > 0 && (
         <div className="sidebar" style={{ marginTop: '2.5rem' }}>
@@ -131,6 +162,7 @@ export default function Home() {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </main>
   );
 }

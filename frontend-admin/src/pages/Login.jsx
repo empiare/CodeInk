@@ -3,7 +3,7 @@ import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -16,17 +16,17 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!username || !password) {
-      setError('请输入用户名和密码');
+    if (!email || !password) {
+      setError('请输入邮箱和密码');
       return;
     }
     setError('');
     setLoading(true);
     try {
-      await login(username, password);
+      await login(email, password);
       navigate('/');
-    } catch {
-      setError('登录失败，请检查用户名和密码');
+    } catch (err) {
+      setError(err.message || '登录失败，请检查邮箱和密码');
     } finally {
       setLoading(false);
     }
@@ -38,12 +38,13 @@ export default function Login() {
         <h1 className="login-card__title">登录</h1>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label className="form-label">用户名</label>
+            <label className="form-label">邮箱</label>
             <input
-              type="text"
+              type="email"
               className="form-input"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="请输入邮箱"
               autoFocus
             />
           </div>
@@ -54,6 +55,7 @@ export default function Login() {
               className="form-input"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              placeholder="请输入密码"
             />
           </div>
           {error && <p className="error-msg">{error}</p>}

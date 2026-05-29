@@ -64,3 +64,37 @@ CREATE TABLE IF NOT EXISTS comments (
     FOREIGN KEY (parent_id) REFERENCES comments(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 );
+
+CREATE TABLE IF NOT EXISTS ai_news (
+    id           BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title        VARCHAR(300)   NOT NULL,
+    url          VARCHAR(500)   NOT NULL COMMENT '原文链接',
+    summary      TEXT           COMMENT '摘要/描述',
+    content      LONGTEXT       COMMENT '正文内容（可选）',
+    cover_image  VARCHAR(500)   COMMENT '封面图/缩略图',
+    source_name  VARCHAR(100)   NOT NULL COMMENT '来源名称',
+    source_key   VARCHAR(50)    NOT NULL COMMENT '来源标识',
+    author       VARCHAR(100)   COMMENT '原作者',
+    published_at DATETIME       COMMENT '原文发布时间',
+    fetched_at   DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '爬取时间',
+    is_visible   BOOLEAN        DEFAULT TRUE COMMENT '是否在前端展示',
+    view_count   INT            DEFAULT 0,
+    created_at   TIMESTAMP      DEFAULT CURRENT_TIMESTAMP,
+    updated_at   TIMESTAMP      DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_url (url),
+    INDEX idx_published_at (published_at DESC),
+    INDEX idx_is_visible (is_visible, published_at DESC)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS ai_news_source (
+    id                   BIGINT AUTO_INCREMENT PRIMARY KEY,
+    source_key           VARCHAR(50)    NOT NULL UNIQUE COMMENT '唯一标识',
+    source_name          VARCHAR(100)   NOT NULL COMMENT '展示名称',
+    feed_url             VARCHAR(500)   NOT NULL COMMENT 'RSS Feed URL',
+    feed_type            VARCHAR(20)    NOT NULL DEFAULT 'RSS' COMMENT 'RSS|ATOM|HTML',
+    enabled              BOOLEAN        DEFAULT TRUE COMMENT '是否启用',
+    last_fetched_at      DATETIME       COMMENT '上次成功抓取时间',
+    sort_order           INT            DEFAULT 0,
+    created_at           TIMESTAMP      DEFAULT CURRENT_TIMESTAMP,
+    updated_at           TIMESTAMP      DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

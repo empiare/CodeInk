@@ -515,3 +515,11 @@ INSERT IGNORE INTO comments (id, article_id, parent_id, author_name, content, is
 (13, 6, 11, '管理员', '不客气！索引优化是数据库性能的关键。', true, '2024-03-13 08:30:00'),
 (14, 11, NULL, 'CodeReviewer', 'This book changed how I write code. Essential reading for every developer.', true, '2024-05-12 11:00:00'),
 (15, 11, NULL, '编程爱好者', '函数不超过 20 行这个原则很值得践行，我现在写代码都会注意这点。', true, '2024-05-15 14:30:00');
+
+-- AI News Sources
+INSERT IGNORE INTO ai_news_source (source_key, source_name, feed_url, feed_type, enabled, sort_order) VALUES
+('jiqizhixin', '机器之心', 'https://www.jiqizhixin.com/rss', 'RSS', true, 1),
+('qbitai', '量子位', 'https://www.qbitai.com/feed', 'RSS', true, 2),
+('36kr-ai', '36氪AI', 'https://36kr.com/feed', 'RSS', true, 3),
+('infoq-cn', 'InfoQ中文', 'https://www.infoq.cn/feed', 'RSS', true, 4),
+('hackernews', 'Hacker News', 'https://hnrss.org/newest?q=AI+OR+LLM+OR+GPT', 'RSS', true, 5);

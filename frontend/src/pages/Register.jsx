@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import client from '../api/client';
+
+const GOOGLE_CLIENT_ID = '977237919357-5p5b7jd865ek42g29ip306phts5jmpi2.apps.googleusercontent.com';
 
 export default function Register() {
   const [username, setUsername] = useState('');
@@ -10,8 +13,72 @@ export default function Register() {
   const [displayName, setDisplayName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { register, isAuthenticated } = useAuth();
+  const { register, setUser, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const googleButtonRef = useRef(null);
+  const callbackRef = useRef(null);
+
+  const handleGoogleResponse = useCallback(async (response) => {
+    try {
+      const data = await client.post('/auth/google', { idToken: response.credential });
+      localStorage.setItem('token', data.token);
+      setUser(data.user);
+      navigate('/');
+    } catch (err) {
+      setError(err.message || 'Google 登录失败');
+    }
+  }, [setUser, navigate]);
+
+  useEffect(() => {
+    callbackRef.current = handleGoogleResponse;
+  }, [handleGoogleResponse]);
+
+  const initGoogleButton = useCallback(() => {
+    if (window.google && googleButtonRef.current) {
+      try {
+        window.google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: (response) => callbackRef.current?.(response),
+        });
+        window.google.accounts.id.renderButton(googleButtonRef.current, {
+          theme: 'outline',
+          size: 'large',
+          width: '100%',
+          text: 'signup_with',
+        });
+      } catch (err) {
+        console.error('Google init error:', err);
+      }
+    }
+  }, []);
+
+  const loadGoogleScript = useCallback(() => {
+    if (window.google) {
+      initGoogleButton();
+      return;
+    }
+
+    const existingScript = document.querySelector('script[src="https://accounts.google.com/gsi/client"]');
+    if (existingScript) {
+      existingScript.addEventListener('load', initGoogleButton);
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    script.onload = initGoogleButton;
+    script.onerror = () => console.error('Failed to load Google script');
+    document.head.appendChild(script);
+  }, [initGoogleButton]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      loadGoogleScript();
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [loadGoogleScript]);
 
   if (isAuthenticated) {
     return <Navigate to="/" replace />;
@@ -110,11 +177,18 @@ export default function Register() {
               {loading ? '注册中...' : '注册'}
             </button>
           </div>
-          <div className="auth-card__footer">
-            <span>已有账号？</span>
-            <Link to="/login">立即登录</Link>
-          </div>
         </form>
+
+        <div className="auth-divider">
+          <span>或</span>
+        </div>
+
+        <div ref={googleButtonRef} className="google-button-container"></div>
+
+        <div className="auth-card__footer">
+          <span>已有账号？</span>
+          <Link to="/login">立即登录</Link>
+        </div>
       </div>
     </div>
   );

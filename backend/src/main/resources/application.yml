@@ -2,10 +2,10 @@ server:
   port: 8080
 
 spring:
+  profiles:
+    active: dev
   datasource:
     url: jdbc:mysql://localhost:3306/myblog?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&createDatabaseIfNotExist=true
-    username: root
-    password: ${DB_PASSWORD:your_password}
     driver-class-name: com.mysql.cj.jdbc.Driver
   sql:
     init:
@@ -17,8 +17,6 @@ spring:
       client:
         registration:
           google:
-            client-id: ${GOOGLE_CLIENT_ID:your_google_client_id}
-            client-secret: ${GOOGLE_CLIENT_SECRET:your_google_client_secret}
             scope:
               - email
               - profile
@@ -36,5 +34,9 @@ mybatis-plus:
       logic-not-delete-value: 0
 
 jwt:
-  secret: ${JWT_SECRET:your_jwt_secret_key_must_be_long_enough}
   expiration: 86400000
+
+# AI资讯翻译配置
+ai-news:
+  translation:
+    enabled: true
