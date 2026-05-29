@@ -12,7 +12,7 @@ public class SchedulingConfig {
     @Bean
     public ThreadPoolTaskScheduler taskScheduler() {
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
-        scheduler.setPoolSize(2);
+        scheduler.setPoolSize(4);
         scheduler.setThreadNamePrefix("ai-crawler-");
         scheduler.setWaitForTasksToCompleteOnShutdown(true);
         scheduler.setAwaitTerminationSeconds(60);

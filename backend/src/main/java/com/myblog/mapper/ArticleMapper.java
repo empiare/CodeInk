@@ -5,6 +5,7 @@ import com.myblog.model.entity.Article;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
@@ -64,4 +65,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
 
     @Select("SELECT COALESCE(SUM(view_count), 0) FROM articles WHERE is_published = 1")
     Long getTotalViews();
+
+    @Update("UPDATE articles SET view_count = view_count + 1 WHERE slug = #{slug} AND is_published = 1")
+    int incrementViewCount(@Param("slug") String slug);
 }

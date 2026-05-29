@@ -3,6 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import client from '../api/client';
 import MarkdownRenderer from '../components/article/MarkdownRenderer';
 
+const toDatetimeLocal = (dateStr) => {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+};
+
 export default function ArticleEditor() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -17,6 +24,7 @@ export default function ArticleEditor() {
     tagIds: [],
     published: false,
     featured: false,
+    publishedAt: '',
   });
   const [categories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
@@ -40,6 +48,7 @@ export default function ArticleEditor() {
             tagIds: a.tags?.map((t) => t.id) || [],
             published: a.published || false,
             featured: a.featured || false,
+            publishedAt: toDatetimeLocal(a.publishedAt),
           });
         })
         .catch(() => setError('加载文章失败'));
@@ -69,6 +78,7 @@ export default function ArticleEditor() {
       const payload = {
         ...form,
         categoryId: form.categoryId || null,
+        publishedAt: form.publishedAt || null,
       };
       if (isEdit) {
         await client.put(`/articles/${id}`, payload);
@@ -195,6 +205,17 @@ export default function ArticleEditor() {
             />
             置顶
           </label>
+        </div>
+
+        <div className="mb-4 shrink-0">
+          <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 mb-1.5">发布时间</label>
+          <input
+            type="datetime-local"
+            step="1"
+            className="w-64 px-3 py-2 text-sm bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded text-stone-900 dark:text-stone-200 outline-none focus:border-amber-700 dark:focus:border-amber-500 transition-colors [color-scheme:light] dark:[color-scheme:dark]"
+            value={form.publishedAt}
+            onChange={(e) => update('publishedAt', e.target.value)}
+          />
         </div>
 
         {error && <p className="text-red-600 text-xs mt-1 shrink-0">{error}</p>}

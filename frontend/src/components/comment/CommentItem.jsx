@@ -1,10 +1,14 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '../../context/AuthContext';
+import client from '../../api/client';
 import CommentForm from './CommentForm';
 
-export default function CommentItem({ comment, replies = [], onReply }) {
-  const { isAuthenticated } = useAuth();
+export default function CommentItem({ comment, replies = [], onReply, onDelete }) {
+  const { isAuthenticated, user } = useAuth();
   const [showReplyForm, setShowReplyForm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [modalState, setModalState] = useState(null);
 
   const date = comment.createdAt
     ? new Date(comment.createdAt).toLocaleDateString('zh-CN', {
@@ -21,6 +25,23 @@ export default function CommentItem({ comment, replies = [], onReply }) {
       return;
     }
     setShowReplyForm(!showReplyForm);
+  };
+
+  const handleDeleteClick = () => {
+    setModalState('confirm');
+  };
+
+  const handleDeleteConfirm = async () => {
+    setModalState(null);
+    setDeleting(true);
+    try {
+      await client.delete(`/comments/${comment.id}`);
+      onDelete?.(comment.id);
+    } catch {
+      setModalState('error');
+    } finally {
+      setDeleting(false);
+    }
   };
 
   const handleReplySubmit = async (commentData) => {
@@ -56,6 +77,16 @@ export default function CommentItem({ comment, replies = [], onReply }) {
         >
           {isAuthenticated ? '回复' : '登录后回复'}
         </button>
+        {user && comment.userId === user.id && (
+          <button
+            className="bg-transparent border-none text-stone-400 dark:text-stone-500 text-xs cursor-pointer p-0 ml-3 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+            onClick={handleDeleteClick}
+            title="删除"
+            disabled={deleting}
+          >
+            {deleting ? '删除中...' : '删除'}
+          </button>
+        )}
       </div>
 
       {showReplyForm && (
@@ -74,9 +105,50 @@ export default function CommentItem({ comment, replies = [], onReply }) {
               key={reply.id}
               comment={reply}
               onReply={onReply}
+              onDelete={onDelete}
             />
           ))}
         </div>
+      )}
+
+      {modalState && createPortal(
+        <div className="fixed inset-0 z-50 flex items-center justify-center" onClick={() => setModalState(null)}>
+          <div className="absolute inset-0 bg-black/20" />
+          <div
+            className="relative bg-white dark:bg-stone-800 rounded-2xl border border-stone-200 dark:border-stone-700 p-6 mx-4 max-w-sm w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className="text-sm text-stone-700 dark:text-stone-300 mb-5 leading-relaxed">
+              {modalState === 'confirm' ? '确定要删除这条评论吗？此操作不可撤销。' : '删除失败，请重试'}
+            </p>
+            <div className="flex justify-end gap-3">
+              {modalState === 'confirm' ? (
+                <>
+                  <button
+                    className="px-4 py-2 text-xs font-medium bg-stone-100 dark:bg-stone-700 text-stone-600 dark:text-stone-300 rounded-xl hover:bg-stone-200 dark:hover:bg-stone-600 transition-colors cursor-pointer border-none"
+                    onClick={() => setModalState(null)}
+                  >
+                    取消
+                  </button>
+                  <button
+                    className="px-4 py-2 text-xs font-medium bg-red-600 hover:bg-red-700 text-white rounded-xl transition-colors cursor-pointer border-none"
+                    onClick={handleDeleteConfirm}
+                  >
+                    确认删除
+                  </button>
+                </>
+              ) : (
+                <button
+                  className="px-4 py-2 text-xs font-medium bg-stone-100 dark:bg-stone-700 text-stone-600 dark:text-stone-300 rounded-xl hover:bg-stone-200 dark:hover:bg-stone-600 transition-colors cursor-pointer border-none"
+                  onClick={() => setModalState(null)}
+                >
+                  关闭
+                </button>
+              )}
+            </div>
+          </div>
+        </div>,
+        document.body
       )}
     </div>
   );

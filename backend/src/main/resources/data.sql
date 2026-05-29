@@ -1,6 +1,8 @@
--- Admin user (password: admin123, BCrypt hashed)
-INSERT IGNORE INTO users (username, email, password, display_name, role) VALUES
-('admin', 'admin@example.com', '$2a$10$nN8inKecZ/UPv98zMcAT6eYq1AfJdTw4Q9VjIBKdhgJv4wvoLs252', '管理员', 'ADMIN');
+-- Users (password: 990823Zl., BCrypt hashed)
+INSERT INTO users (username, email, password, display_name, role) VALUES
+('zengla823', 'zengla823@gmail.com', '$2b$10$kEALDdsPAZheWO7HJXn63ehCqSKjzwn7jLV5/RXs6X6JiYZTTQ3V6', '管理员', 'ADMIN'),
+('861475790', '861475790@qq.com', '$2b$10$kEALDdsPAZheWO7HJXn63ehCqSKjzwn7jLV5/RXs6X6JiYZTTQ3V6', '普通用户', 'USER')
+ON DUPLICATE KEY UPDATE password = VALUES(password), role = VALUES(role);
 
 -- Categories
 INSERT IGNORE INTO categories (name, slug, description, sort_order) VALUES
@@ -522,4 +524,17 @@ INSERT IGNORE INTO ai_news_source (source_key, source_name, feed_url, feed_type,
 ('qbitai', '量子位', 'https://www.qbitai.com/feed', 'RSS', true, 2),
 ('36kr-ai', '36氪AI', 'https://36kr.com/feed', 'RSS', true, 3),
 ('infoq-cn', 'InfoQ中文', 'https://www.infoq.cn/feed', 'RSS', true, 4),
-('hackernews', 'Hacker News', 'https://hnrss.org/newest?q=AI+OR+LLM+OR+GPT', 'RSS', true, 5);
+('hackernews', 'Hacker News', 'https://hnrss.org/newest?q=AI+OR+LLM+OR+GPT', 'RSS', true, 5),
+('openai-blog', 'OpenAI Blog', 'https://openai.com/blog/rss.xml', 'RSS', true, 6),
+('anthropic-blog', 'Anthropic Blog', 'https://www.anthropic.com/blog/rss.xml', 'RSS', true, 7),
+('deepmind-blog', 'DeepMind Blog', 'https://deepmind.google/blog/feed.xml', 'RSS', true, 8),
+('mit-treview', 'MIT Tech Review AI', 'https://www.technologyreview.com/topic/artificial-intelligence/feed', 'RSS', true, 9),
+('arstechnica-ai', 'Ars Technica AI', 'https://feeds.arstechnica.com/arstechnica/ai', 'RSS', true, 10),
+('arxiv-csai', 'arXiv CS.AI', 'https://rss.arxiv.org/rss/cs.AI', 'RSS', true, 11),
+('arxiv-cscl', 'arXiv CS.CL', 'https://rss.arxiv.org/rss/cs.CL', 'RSS', true, 12),
+('arxiv-cscv', 'arXiv CS.CV', 'https://rss.arxiv.org/rss/cs.CV', 'RSS', true, 13),
+('huggingface-blog', 'Hugging Face Blog', 'https://huggingface.co/blog/feed.xml', 'RSS', true, 14),
+('langchain-blog', 'LangChain Blog', 'https://blog.langchain.dev/rss/', 'RSS', true, 15),
+('meta-ai-blog', 'Meta AI Blog', 'https://ai.meta.com/blog/feed/', 'RSS', true, 16),
+('stabilityai-blog', 'Stability AI Blog', 'https://stability.ai/news/rss.xml', 'RSS', true, 17),
+('googleresearch', 'Google Research', 'https://blog.research.google/feeds/posts/default', 'ATOM', true, 18);

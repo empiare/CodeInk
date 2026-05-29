@@ -2,6 +2,7 @@ server:
   port: 8080
 
 spring:
+  mandatory-file-encoding: UTF-8
   profiles:
     active: dev
   datasource:
@@ -36,12 +37,13 @@ mybatis-plus:
 jwt:
   expiration: 86400000
 
-# 头像上传配置
+# 头像上传配置（环境变量优先，未设置则自动检测OS选择路径）
 avatar:
-  upload-dir: ${AVATAR_UPLOAD_DIR:D:\\acode\\blog\\backend\\src\\main\\resources\\avatar}
-  base-url: ${AVATAR_BASE_URL:http://localhost:8080/avatar}
+  upload-dir: ${AVATAR_UPLOAD_DIR:}
+  base-url: ${AVATAR_BASE_URL:}
 
 # AI资讯翻译配置
 ai-news:
   translation:
     enabled: true
+    primary: baidu

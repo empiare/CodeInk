@@ -1,8 +1,11 @@
 package com.myblog.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.myblog.exception.ResourceNotFoundException;
 import com.myblog.mapper.CommentMapper;
 import com.myblog.mapper.UserMapper;
+import com.myblog.model.dto.CommentAdminDTO;
 import com.myblog.model.dto.CommentDTO;
 import com.myblog.model.entity.Comment;
 import com.myblog.model.entity.User;
@@ -51,9 +54,27 @@ public class CommentService {
         return toDTO(entity);
     }
 
-    public void delete(Long id) {
+    public IPage<CommentAdminDTO> listAll(int page, int size) {
+        IPage<CommentAdminDTO> result = commentMapper.selectAllWithPagination(new Page<>(page, size));
+        result.getRecords().forEach(dto -> {
+            if (dto.getUserId() != null) {
+                User user = userMapper.selectById(dto.getUserId());
+                if (user != null) {
+                    dto.setUserAvatarUrl(user.getAvatarUrl());
+                }
+            }
+        });
+        return result;
+    }
+
+    public void delete(Long id, String email) {
         Comment comment = commentMapper.selectById(id);
         if (comment == null) throw new ResourceNotFoundException("评论不存在");
+        if (email != null) {
+            User currentUser = userMapper.selectByEmail(email);
+            if (currentUser == null) throw new IllegalArgumentException("用户不存在");
+            if (!currentUser.getId().equals(comment.getUserId())) throw new IllegalArgumentException("无权删除此评论");
+        }
         commentMapper.deleteById(id);
     }
 

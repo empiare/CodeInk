@@ -43,6 +43,11 @@ public class ArticleController {
         return ApiResponse.ok(articleService.getBySlug(slug));
     }
 
+    @PostMapping("/{slug}/view")
+    public ApiResponse<Integer> recordView(@PathVariable String slug) {
+        return ApiResponse.ok(articleService.incrementViewCount(slug));
+    }
+
     @GetMapping("/id/{id}")
     public ApiResponse<ArticleDTO> getById(@PathVariable Long id) {
         return ApiResponse.ok(articleService.getById(id));

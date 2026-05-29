@@ -79,6 +79,7 @@ CREATE TABLE IF NOT EXISTS ai_news (
     published_at DATETIME       COMMENT '原文发布时间',
     fetched_at   DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '爬取时间',
     is_visible   BOOLEAN        DEFAULT TRUE COMMENT '是否在前端展示',
+    is_deleted   TINYINT        DEFAULT 0 COMMENT '是否删除 0未删除 1已删除',
     view_count   INT            DEFAULT 0,
     created_at   TIMESTAMP      DEFAULT CURRENT_TIMESTAMP,
     updated_at   TIMESTAMP      DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -98,4 +99,24 @@ CREATE TABLE IF NOT EXISTS ai_news_source (
     sort_order           INT            DEFAULT 0,
     created_at           TIMESTAMP      DEFAULT CURRENT_TIMESTAMP,
     updated_at           TIMESTAMP      DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS task_execution_history (
+    id           BIGINT AUTO_INCREMENT PRIMARY KEY,
+    task_name    VARCHAR(100)   NOT NULL COMMENT '任务名称',
+    result       VARCHAR(20)    NOT NULL COMMENT 'SUCCESS/FAILURE',
+    message      VARCHAR(500)   COMMENT '执行消息',
+    executed_at  DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '执行时间',
+    created_at   TIMESTAMP      DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_task_name (task_name),
+    INDEX idx_executed_at (executed_at DESC)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS page_visits (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    ip_address VARCHAR(45) NOT NULL,
+    page_path VARCHAR(500) NOT NULL,
+    visited_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_ip_address (ip_address),
+    INDEX idx_visited_at (visited_at DESC)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

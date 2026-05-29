@@ -94,7 +94,7 @@ export function useArticle(slug) {
       .finally(() => setLoading(false));
   }, [slug]);
 
-  return { article, loading, error };
+  return { article, loading, error, setArticle };
 }
 
 export function useCategories() {

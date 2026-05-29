@@ -28,8 +28,9 @@ public class CommentController {
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<Void> delete(@PathVariable Long id) {
-        commentService.delete(id);
+    public ApiResponse<Void> delete(@PathVariable Long id, Authentication authentication) {
+        String email = authentication != null ? authentication.getName() : null;
+        commentService.delete(id, email);
         return ApiResponse.ok();
     }
 }

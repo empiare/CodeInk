@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Search } from 'lucide-react';
 import client from '../api/client';
@@ -23,7 +23,7 @@ export default function Home() {
       client.get('/tags'),
       client.get('/categories'),
       client.get('/stats'),
-      client.get('/ai-news/latest?limit=6').catch(() => []),
+      client.get('/ai-news/latest?limit=8').catch(() => []),
     ]).then(([articleRes, tagRes, catRes, statsRes, aiNewsRes]) => {
       const articlesData = (articleRes?.records || articleRes?.content || [])
         .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
@@ -40,34 +40,68 @@ export default function Home() {
     }).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
+  const searchTimerRef = useRef(null);
+
+  const doSearch = (query) => {
+    if (!query.trim()) {
+      setSearchResults([]);
+      return;
+    }
+    setSearching(true);
+    client.get(`/search?q=${encodeURIComponent(query.trim())}&size=10`)
+      .then((res) => {
+        setSearchResults(res.records || res.content || []);
+      })
+      .catch(() => setSearchResults([]))
+      .finally(() => setSearching(false));
+  };
+
+  const handleSearchClick = () => {
+    if (searchTimerRef.current) {
+      clearTimeout(searchTimerRef.current);
+      searchTimerRef.current = null;
+    }
+    doSearch(searchQuery);
+  };
+
   useEffect(() => {
     if (!searchQuery.trim()) {
       setSearchResults([]);
       return;
     }
-    const timer = setTimeout(() => {
-      setSearching(true);
-      client.get(`/search?q=${encodeURIComponent(searchQuery.trim())}&size=10`)
-        .then((res) => {
-          setSearchResults(res.records || res.content || []);
-        })
-        .catch(() => setSearchResults([]))
-        .finally(() => setSearching(false));
+    searchTimerRef.current = setTimeout(() => {
+      doSearch(searchQuery);
     }, 300);
-    return () => clearTimeout(timer);
+    return () => {
+      if (searchTimerRef.current) {
+        clearTimeout(searchTimerRef.current);
+      }
+    };
   }, [searchQuery]);
 
   return (
-    <div className="flex max-md:flex-col gap-6 max-w-[1660px] mx-auto">
-      {stats && (
-        <>
-        <div className="max-md:hidden w-[280px] flex-shrink-0" />
-        <aside className="max-md:hidden fixed top-[4.5rem] left-8 z-40 w-[280px] flex flex-col gap-2 px-4 py-6 bg-white/60 dark:bg-stone-900/50 backdrop-blur-xl border-r border-stone-900/[0.06] dark:border-white/[0.04] rounded-2xl h-[calc(100vh-5rem)] overflow-y-auto">
+    <div className="max-w-[1660px] mx-auto px-4">
+      <div className="px-8 pt-6">
+        <div className="flex items-center justify-center gap-3 mb-10">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="搜索文章标题、内容、标签、分类..."
+            className="w-[500px] px-6 h-[70px] py-5 text-sm bg-white dark:bg-stone-900 border-0 rounded-[24px] text-stone-900 dark:text-stone-200 outline-none focus:ring-1 focus:ring-amber-500/20 transition-all placeholder:text-stone-400 dark:placeholder:text-stone-500"
+          />
+          <Search size={20} className="text-stone-400 dark:text-stone-500 cursor-pointer hover:text-amber-600 dark:hover:text-amber-400 transition-colors shrink-0" onClick={handleSearchClick} />
+        </div>
+      </div>
+
+      <div className="flex max-md:flex-col gap-6">
+        {stats && (
+          <aside className="max-md:hidden sticky top-[4.5rem] w-[280px] shrink-0 self-start flex flex-col gap-2 px-4 py-6 bg-white/60 dark:bg-stone-900/50 backdrop-blur-xl border-r border-stone-900/[0.06] dark:border-white/[0.04] rounded-2xl max-h-[calc(100vh-5rem)] overflow-y-auto mt-[48px]">
             {categories.length > 0 && (
               <>
                 <div className="px-1 py-2">
                   <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 px-2.5 py-1 rounded-full">
-                    文章分类
+                    分类
                   </span>
                 </div>
                 {categories.map(cat => (
@@ -105,7 +139,7 @@ export default function Home() {
               <>
                 <div className="px-1 py-2 mt-2">
                   <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 px-2.5 py-1 rounded-full">
-                    精选文章
+                    精选
                   </span>
                 </div>
                 {featuredArticles.map((article, index) => (
@@ -124,22 +158,10 @@ export default function Home() {
                 ))}
               </>
             )}
-        </aside>
-        </>
-      )}
+          </aside>
+        )}
 
-      <main className="flex-1 min-w-0 px-8 py-6">
-          <div className="relative mb-10">
-            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 dark:text-stone-500 pointer-events-none" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="搜索文章标题、内容、标签、分类..."
-              className="w-full pl-10 pr-4 py-2.5 text-sm bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-xl text-stone-900 dark:text-stone-200 outline-none focus:border-amber-500 dark:focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 transition-all placeholder:text-stone-400 dark:placeholder:text-stone-500"
-            />
-          </div>
-
+        <main className="flex-1 min-w-0 px-8 pb-6 !pt-0">
           {searchQuery.trim() ? (
             <>
               {searching ? (
@@ -191,12 +213,10 @@ export default function Home() {
               </div>
             </>
           )}
-      </main>
+        </main>
 
-      {aiNews.length > 0 && (
-        <>
-        <div className="max-md:hidden w-[320px] flex-shrink-0" style={{ transform: 'scaleY(-1)' }} />
-        <aside className="max-md:hidden fixed top-[4.5rem] right-8 z-40 w-[320px] flex flex-col gap-2 px-4 py-6 bg-white dark:bg-stone-900 border-l border-stone-900/[0.06] dark:border-white/[0.04] rounded-2xl h-[calc(100vh-5rem)] overflow-y-auto" style={{ willChange: 'transform' }}>
+        {aiNews.length > 0 && (
+          <aside className="max-md:hidden sticky top-[4.5rem] w-[320px] shrink-0 self-start flex flex-col gap-2 px-4 py-6 bg-white dark:bg-stone-900 border-l border-stone-900/[0.06] dark:border-white/[0.04] rounded-2xl max-h-[calc(100vh-5rem)] overflow-y-auto mt-[48px] mb-[48px]">
             <div className="px-1 py-2">
               <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 px-2.5 py-1 rounded-full">
                 AI 资讯
@@ -208,7 +228,7 @@ export default function Home() {
                 href={news.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-col gap-1.5 px-3 py-3 rounded-xl hover:bg-stone-50 dark:hover:bg-white/[0.03] transition-all duration-200 no-underline text-inherit"
+                className="group flex flex-col gap-1 px-2.5 py-2 rounded-xl hover:bg-stone-50 dark:hover:bg-white/[0.03] transition-all duration-200 no-underline text-inherit"
               >
                 <span className="inline-block text-[10px] font-medium px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 self-start">
                   {news.sourceName}
@@ -221,9 +241,9 @@ export default function Home() {
                 </span>
               </a>
             ))}
-        </aside>
-        </>
-      )}
+          </aside>
+        )}
+      </div>
     </div>
   );
 }

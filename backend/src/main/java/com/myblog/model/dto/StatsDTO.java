@@ -8,4 +8,5 @@ public class StatsDTO {
     private Long categoryCount;
     private Long tagCount;
     private Long totalViews;
+    private Long commentCount;
 }

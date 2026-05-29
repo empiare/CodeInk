@@ -63,6 +63,14 @@ export default function SearchResults() {
     setSearchParams(params);
   };
 
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (keyword.trim()) params.set('q', keyword.trim());
+    if (category) params.set('category', category);
+    if (tag) params.set('tag', tag);
+    setSearchParams(params);
+  }, [category, tag]);
+
   const selectedCategoryName = categories.find((c) => c.slug === categorySlug)?.name;
   const selectedTagName = tags.find((t) => t.slug === tagSlug)?.name;
 

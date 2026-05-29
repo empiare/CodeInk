@@ -44,8 +44,6 @@ public class ArticleService {
     public ArticleDTO getBySlug(String slug) {
         Article article = articleMapper.selectBySlug(slug);
         if (article == null) throw new ResourceNotFoundException("文章不存在");
-        article.setViewCount(article.getViewCount() + 1);
-        articleMapper.updateById(article);
         return toDetailDTO(article);
     }
 
@@ -53,6 +51,14 @@ public class ArticleService {
         Article article = articleMapper.selectById(id);
         if (article == null) throw new ResourceNotFoundException("文章不存在");
         return toDetailDTO(article);
+    }
+
+    @Transactional
+    public int incrementViewCount(String slug) {
+        int rows = articleMapper.incrementViewCount(slug);
+        if (rows == 0) throw new ResourceNotFoundException("文章不存在");
+        Article article = articleMapper.selectBySlug(slug);
+        return article.getViewCount();
     }
 
     public List<ArticleSummaryDTO> getFeatured(int limit) {
@@ -103,7 +109,9 @@ public class ArticleService {
         article.setViewCount(0);
         article.setCreatedAt(LocalDateTime.now());
         article.setUpdatedAt(LocalDateTime.now());
-        if (article.getIsPublished()) article.setPublishedAt(LocalDateTime.now());
+        if (article.getIsPublished()) {
+            article.setPublishedAt(dto.getPublishedAt() != null ? dto.getPublishedAt() : LocalDateTime.now());
+        }
         articleMapper.insert(article);
         saveArticleTags(article.getId(), dto.getTagIds());
         return toDetailDTO(article);
@@ -122,7 +130,11 @@ public class ArticleService {
         article.setIsPublished(dto.getPublished() != null && dto.getPublished());
         article.setIsFeatured(dto.getFeatured() != null && dto.getFeatured());
         article.setUpdatedAt(LocalDateTime.now());
-        if (!wasPublished && article.getIsPublished()) article.setPublishedAt(LocalDateTime.now());
+        if (!wasPublished && article.getIsPublished()) {
+            article.setPublishedAt(dto.getPublishedAt() != null ? dto.getPublishedAt() : LocalDateTime.now());
+        } else if (dto.getPublishedAt() != null && article.getIsPublished()) {
+            article.setPublishedAt(dto.getPublishedAt());
+        }
         articleMapper.updateById(article);
         articleTagMapper.deleteByArticleId(id);
         saveArticleTags(id, dto.getTagIds());

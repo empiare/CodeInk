@@ -45,6 +45,14 @@ export default function ArticleList() {
     setSearchParams(params);
   };
 
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (keyword.trim()) params.set('q', keyword.trim());
+    if (categorySlug) params.set('category', categorySlug);
+    if (tagSlug) params.set('tag', tagSlug);
+    setSearchParams(params);
+  }, [categorySlug, tagSlug]);
+
   const handleReset = () => {
     setKeyword('');
     setCategorySlug('');
@@ -109,6 +117,31 @@ export default function ArticleList() {
         </div>
       </form>
 
+      {!isFiltered && (categories.length > 0 || tags.length > 0) && (
+        <div className="mt-10 pt-6 border-t border-stone-100 dark:border-stone-900">
+          {categories.length > 0 && (
+            <div className="mb-4 flex items-center gap-3">
+              <h3 className="text-xs uppercase tracking-wider text-stone-400 dark:text-stone-500 font-semibold">分类</h3>
+              <div className="flex flex-wrap gap-1.5">
+                {categories.map((cat) => (
+                  <CategoryBadge key={cat.id} category={cat} />
+                ))}
+              </div>
+            </div>
+          )}
+          {tags.length > 0 && (
+            <div className="flex items-center gap-3">
+              <h3 className="text-xs uppercase tracking-wider text-stone-400 dark:text-stone-500 font-semibold">标签</h3>
+              <div className="flex flex-wrap gap-1.5">
+                {tags.map((tag) => (
+                  <TagBadge key={tag.id} tag={tag} />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       {isFiltered && (
         <div className="mb-6 flex flex-wrap items-center gap-2 text-sm text-stone-500 dark:text-stone-400">
           <span>筛选条件：</span>
@@ -144,31 +177,6 @@ export default function ArticleList() {
       )}
 
       <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
-
-      {!isFiltered && (categories.length > 0 || tags.length > 0) && (
-        <div className="mt-10 pt-6 border-t border-stone-100 dark:border-stone-900">
-          {categories.length > 0 && (
-            <div className="mb-4">
-              <h3 className="text-xs uppercase tracking-wider text-stone-400 dark:text-stone-500 mb-3 font-semibold">分类</h3>
-              <div className="flex flex-wrap gap-1.5">
-                {categories.map((cat) => (
-                  <CategoryBadge key={cat.id} category={cat} />
-                ))}
-              </div>
-            </div>
-          )}
-          {tags.length > 0 && (
-            <div>
-              <h3 className="text-xs uppercase tracking-wider text-stone-400 dark:text-stone-500 mb-3 font-semibold">标签</h3>
-              <div className="flex flex-wrap gap-1.5">
-                {tags.map((tag) => (
-                  <TagBadge key={tag.id} tag={tag} />
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 }

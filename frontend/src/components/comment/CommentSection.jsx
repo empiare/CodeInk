@@ -43,15 +43,19 @@ export default function CommentSection({ articleId }) {
       return;
     }
 
-    await client.post('/comments', {
+    const newComment = await client.post('/comments', {
       ...commentData,
       articleId,
     });
-    fetchComments();
+    setComments((prev) => [...prev, newComment]);
   };
 
   const handleReply = async (commentData) => {
     await handleSubmit(commentData);
+  };
+
+  const handleDelete = async (commentId) => {
+    setComments((prev) => prev.filter((c) => c.id !== commentId));
   };
 
   const rootComments = comments.filter((c) => !c.parentId);
@@ -77,6 +81,7 @@ export default function CommentSection({ articleId }) {
               comment={comment}
               replies={comments.filter((c) => c.parentId === comment.id)}
               onReply={handleReply}
+              onDelete={handleDelete}
             />
           ))}
         </div>

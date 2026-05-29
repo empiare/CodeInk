@@ -94,7 +94,6 @@ public class AiNewsCrawlerService {
 
         for (AiNews news : newsList) {
             try {
-                // 检查是否已存在
                 AiNews existing = aiNewsMapper.selectByUrl(news.getUrl());
                 if (existing == null) {
                     aiNewsMapper.insert(news);

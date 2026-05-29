@@ -145,7 +145,7 @@ export default function Login() {
           <span className="flex-1 h-px bg-stone-200/70 dark:bg-stone-700/50" />
         </div>
 
-        <div ref={googleButtonRef} className="flex justify-center my-2"></div>
+        <div ref={googleButtonRef} className="w-full my-2"></div>
 
         <div className="text-center mt-5 text-sm text-stone-600 dark:text-stone-400">
           <span>还没有账号？</span>

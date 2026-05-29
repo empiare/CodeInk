@@ -1,6 +1,8 @@
+import { useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { useArticle } from '../hooks';
+import client from '../api/client';
 import MarkdownRenderer from '../components/article/MarkdownRenderer';
 import TableOfContents from '../components/article/TableOfContents';
 import CategoryBadge from '../components/common/CategoryBadge';
@@ -9,20 +11,59 @@ import CommentSection from '../components/comment/CommentSection';
 
 export default function ArticleDetail() {
   const { slug } = useParams();
-  const { article, loading, error } = useArticle(slug);
+  const { article, loading, error, setArticle } = useArticle(slug);
 
   const date = article?.publishedAt
-    ? new Date(article.publishedAt).toLocaleDateString('zh-CN', {
+    ? new Date(article.publishedAt).toLocaleString('zh-CN', {
         year: 'numeric',
-        month: 'long',
-        day: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
       })
     : '';
+
+  const viewedTimer = useRef(null);
+
+  useEffect(() => {
+    if (loading || error || !slug || !article) return;
+
+    const VIEW_COOLDOWN = 60_000; // 1分钟冷却期
+    const STORAGE_KEY = 'blog_viewed_articles';
+
+    viewedTimer.current = setTimeout(() => {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        const records = raw ? JSON.parse(raw) : {};
+        const lastView = records[slug] || 0;
+        const now = Date.now();
+
+        if (now - lastView < VIEW_COOLDOWN) return;
+
+        client.post(`/articles/${slug}/view`)
+          .then((newCount) => {
+            setArticle(prev => prev ? { ...prev, viewCount: newCount } : prev);
+            records[slug] = now;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+          })
+          .catch(() => {});
+      } catch {
+        // localStorage 不可用时静默降级
+      }
+    }, 1000);
+
+    return () => clearTimeout(viewedTimer.current);
+  }, [slug, loading, error, article]);
 
   return (
     <>
       {article && <TableOfContents content={article.content} />}
-      <div className="reading-area lg:ml-[304px]">
+      <div className="max-w-[1660px] mx-auto px-4">
+        <div className="flex gap-6">
+          <div className="hidden lg:block w-72 shrink-0" />
+          <div className="reading-area flex-1">
         {loading ? (
           <div className="text-center py-16 text-stone-400 dark:text-stone-500 text-sm">加载中...</div>
         ) : error || !article ? (
@@ -74,6 +115,8 @@ export default function ArticleDetail() {
             <CommentSection articleId={article.id} />
           </>
         )}
+          </div>
+        </div>
       </div>
     </>
   );

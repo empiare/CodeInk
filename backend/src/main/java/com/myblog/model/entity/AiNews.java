@@ -21,6 +21,8 @@ public class AiNews {
     private LocalDateTime fetchedAt;
     @TableField("is_visible")
     private Boolean isVisible;
+    @TableField("is_deleted")
+    private Integer isDeleted;
     private Integer viewCount;
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;

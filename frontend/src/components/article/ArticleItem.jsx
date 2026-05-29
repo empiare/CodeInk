@@ -1,27 +1,22 @@
 import { Link } from 'react-router-dom';
+import { Eye } from 'lucide-react';
 import CategoryBadge from '../common/CategoryBadge';
 import TagBadge from '../common/TagBadge';
 
 export default function ArticleItem({ article }) {
   const date = article.publishedAt
-    ? new Date(article.publishedAt).toLocaleDateString('zh-CN', {
+    ? new Date(article.publishedAt).toLocaleString('zh-CN', {
         year: 'numeric',
-        month: 'long',
-        day: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
       })
     : '';
 
   return (
-    <article className="group py-8 border-b border-stone-100/80 dark:border-stone-800/50 last:border-none transition-colors">
-      <div className="flex items-center gap-2 mb-2">
-        <span className="text-xs text-stone-400 dark:text-stone-500 tabular-nums">{date}</span>
-        {article.viewCount > 0 && (
-          <>
-            <span className="text-stone-300 dark:text-stone-700">·</span>
-            <span className="text-xs text-stone-400 dark:text-stone-500">{article.viewCount} 阅读</span>
-          </>
-        )}
-      </div>
+    <article className="group py-5 border-b border-stone-100/80 dark:border-stone-800/50 last:border-none transition-colors">
       <h2 className="text-xl font-bold text-stone-900 dark:text-stone-100 mb-2 leading-snug tracking-tight">
         <Link
           to={`/articles/${article.slug}`}
@@ -43,6 +38,12 @@ export default function ArticleItem({ article }) {
         {article.tags?.length > 3 && (
           <span className="text-xs text-stone-400">+{article.tags.length - 3}</span>
         )}
+        <div className="flex items-center gap-2 ml-auto">
+          <span className="text-xs text-stone-400 dark:text-stone-500 tabular-nums">{date}</span>
+          <span className="text-stone-300 dark:text-stone-700">·</span>
+          <span className="text-xs text-stone-400 dark:text-stone-500">{article.viewCount ?? 0}</span>
+          <Eye size={12} className="text-stone-400 dark:text-stone-500" />
+        </div>
       </div>
     </article>
   );

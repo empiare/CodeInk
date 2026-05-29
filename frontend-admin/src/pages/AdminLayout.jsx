@@ -1,6 +1,6 @@
 import { Outlet, NavLink, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, FileText, FolderOpen, Tags, Users, LogOut, ExternalLink } from 'lucide-react';
+import { LayoutDashboard, FileText, FolderOpen, Tags, Users, MessageSquare, LogOut, ExternalLink, Clock } from 'lucide-react';
 
 export default function AdminLayout() {
   const { isAuthenticated, loading, logout } = useAuth();
@@ -30,6 +30,10 @@ export default function AdminLayout() {
             <LayoutDashboard size={16} />
             仪表盘
           </NavLink>
+          <NavLink to="/users" className={navLinkClass}>
+            <Users size={16} />
+            用户管理
+          </NavLink>
           <NavLink to="/articles" className={navLinkClass}>
             <FileText size={16} />
             文章管理
@@ -42,9 +46,13 @@ export default function AdminLayout() {
             <Tags size={16} />
             标签管理
           </NavLink>
-          <NavLink to="/users" className={navLinkClass}>
-            <Users size={16} />
-            用户管理
+          <NavLink to="/comments" className={navLinkClass}>
+            <MessageSquare size={16} />
+            评论管理
+          </NavLink>
+          <NavLink to="/tasks" className={navLinkClass}>
+            <Clock size={16} />
+            定时任务
           </NavLink>
         </nav>
         <div className="mt-auto border-t border-stone-200/50 dark:border-stone-800/50 pt-4 flex flex-col gap-2">

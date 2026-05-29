@@ -98,7 +98,7 @@ export default function TableOfContents({ content }) {
         />
       )}
 
-      <div className="hidden lg:block fixed top-16 left-8 z-40 h-[calc(100vh-5rem)] w-72 bg-white dark:bg-stone-900 border-r border-stone-100 dark:border-stone-800 rounded-2xl mt-4 overflow-hidden">
+      <div className="hidden lg:block fixed top-16 toc-left z-40 h-[calc(100vh-5rem)] w-72 bg-white dark:bg-stone-900 border-r border-stone-100 dark:border-stone-800 rounded-2xl mt-4 overflow-hidden">
         <div className="h-full flex flex-col">
           <div className="p-4 pb-3 border-b border-stone-100 dark:border-stone-800">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-stone-400 dark:text-stone-500">
@@ -138,7 +138,7 @@ export default function TableOfContents({ content }) {
 
       <div
         className={`
-          lg:hidden fixed top-16 left-8 z-40 h-[calc(100vh-5rem)] w-72 mt-4 rounded-2xl
+          lg:hidden fixed top-16 toc-left z-40 h-[calc(100vh-5rem)] w-72 mt-4 rounded-2xl
           bg-white dark:bg-stone-900
           shadow-xl
           transition-transform duration-300 ease-in-out

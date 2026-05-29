@@ -8,11 +8,13 @@ import ArticleEditor from './pages/ArticleEditor';
 import CategoryManager from './pages/CategoryManager';
 import TagManager from './pages/TagManager';
 import UserManager from './pages/UserManager';
+import CommentManager from './pages/CommentManager';
+import TaskManager from './pages/TaskManager';
 
 export default function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<AdminLayout />}>
@@ -23,10 +25,12 @@ export default function App() {
             <Route path="categories" element={<CategoryManager />} />
             <Route path="tags" element={<TagManager />} />
             <Route path="users" element={<UserManager />} />
+            <Route path="comments" element={<CommentManager />} />
+            <Route path="tasks" element={<TaskManager />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }

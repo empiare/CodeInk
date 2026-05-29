@@ -22,11 +22,15 @@ public class SecurityConfig {
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/articles/*/view").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/page-visit").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/comments").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/ai-news/crawl").permitAll()
                 .requestMatchers("/api/auth/login").permitAll()
                 .requestMatchers("/api/auth/register").permitAll()
                 .requestMatchers("/api/auth/google").permitAll()
+                .requestMatchers("/api/admin/auth/login").permitAll()
+                .requestMatchers("/avatar/**").permitAll()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);

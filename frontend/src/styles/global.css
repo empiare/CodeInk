@@ -7,6 +7,11 @@
   --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
 }
 
+/* TOC alignment - matches Header's max-w-[1660px] mx-auto px-4 */
+.toc-left {
+  left: max(1rem, calc((100vw - 1660px) / 2 + 1rem));
+}
+
 /* Reading area - Medium style */
 .reading-area {
   max-width: 680px;
@@ -279,4 +284,20 @@ img {
 
 .user-menu:hover .user-dropdown {
   display: block;
+}
+
+/* Hero gradient animation for About page */
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.hero-gradient {
+  background: linear-gradient(135deg, #78716c, #d97706, #78716c, #b45309);
+  background-size: 300% 300%;
+  animation: gradient-shift 8s ease infinite;
 }
