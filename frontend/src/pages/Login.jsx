@@ -103,14 +103,14 @@ export default function Login() {
 
   return (
     <div className="flex justify-center items-center min-h-[calc(100vh-200px)] py-8 px-8">
-      <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded p-8 w-full max-w-[400px] shadow-md">
-        <h1 className="text-2xl font-semibold mb-6 text-center">登录</h1>
+      <div className="bg-white/80 dark:bg-stone-900/70 backdrop-blur-xl border border-stone-900/[0.06] dark:border-white/[0.06] rounded-2xl p-8 w-full max-w-[400px] shadow-lg">
+        <h1 className="text-2xl font-bold mb-6 text-center text-stone-900 dark:text-stone-100">登录</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 mb-1.5">邮箱</label>
             <input
               type="email"
-              className="w-full px-3 py-2 text-sm bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded text-stone-900 dark:text-stone-200 outline-none focus:border-amber-700 dark:focus:border-amber-500 transition-colors"
+              className="w-full px-4 py-2.5 text-sm bg-white/60 dark:bg-stone-900/50 backdrop-blur-sm border border-stone-200/70 dark:border-stone-700/50 rounded-xl text-stone-900 dark:text-stone-200 outline-none focus:border-amber-500/60 dark:focus:border-amber-500/60 focus:ring-2 focus:ring-amber-500/10 transition-all placeholder:text-stone-400 dark:placeholder:text-stone-500"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="请输入邮箱"
@@ -121,17 +121,17 @@ export default function Login() {
             <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 mb-1.5">密码</label>
             <input
               type="password"
-              className="w-full px-3 py-2 text-sm bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded text-stone-900 dark:text-stone-200 outline-none focus:border-amber-700 dark:focus:border-amber-500 transition-colors"
+              className="w-full px-4 py-2.5 text-sm bg-white/60 dark:bg-stone-900/50 backdrop-blur-sm border border-stone-200/70 dark:border-stone-700/50 rounded-xl text-stone-900 dark:text-stone-200 outline-none focus:border-amber-500/60 dark:focus:border-amber-500/60 focus:ring-2 focus:ring-amber-500/10 transition-all placeholder:text-stone-400 dark:placeholder:text-stone-500"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="请输入密码"
             />
           </div>
-          {error && <p className="text-red-600 text-xs mt-1">{error}</p>}
-          <div className="flex gap-2 mt-4">
+          {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+          <div className="flex gap-2 mt-5">
             <button
               type="submit"
-              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-sm border rounded cursor-pointer transition-all bg-amber-700 dark:bg-amber-500 border-amber-700 dark:border-amber-500 text-white hover:opacity-85 w-full"
+              className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 text-sm font-medium bg-gradient-to-b from-amber-600 to-amber-700 dark:from-amber-500 dark:to-amber-600 text-white border-none rounded-xl cursor-pointer shadow-sm hover:from-amber-700 hover:to-amber-800 dark:hover:from-amber-400 dark:hover:to-amber-500 hover:shadow-md active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed w-full"
               disabled={loading}
             >
               {loading ? '登录中...' : '登录'}
@@ -140,16 +140,16 @@ export default function Login() {
         </form>
 
         <div className="flex items-center my-6 text-stone-400 dark:text-stone-500 text-sm">
-          <span className="flex-1 h-px bg-stone-200 dark:bg-stone-800" />
+          <span className="flex-1 h-px bg-stone-200/70 dark:bg-stone-700/50" />
           <span className="px-4">或</span>
-          <span className="flex-1 h-px bg-stone-200 dark:bg-stone-800" />
+          <span className="flex-1 h-px bg-stone-200/70 dark:bg-stone-700/50" />
         </div>
 
         <div ref={googleButtonRef} className="flex justify-center my-2"></div>
 
-        <div className="text-center mt-4 text-sm text-stone-600 dark:text-stone-400">
+        <div className="text-center mt-5 text-sm text-stone-600 dark:text-stone-400">
           <span>还没有账号？</span>
-          <Link to="/register">立即注册</Link>
+          <Link to="/register" className="text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300">立即注册</Link>
         </div>
       </div>
     </div>

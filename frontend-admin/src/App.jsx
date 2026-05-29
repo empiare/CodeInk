@@ -7,6 +7,7 @@ import ArticleListAdmin from './pages/ArticleListAdmin';
 import ArticleEditor from './pages/ArticleEditor';
 import CategoryManager from './pages/CategoryManager';
 import TagManager from './pages/TagManager';
+import UserManager from './pages/UserManager';
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
             <Route path="articles/:id/edit" element={<ArticleEditor />} />
             <Route path="categories" element={<CategoryManager />} />
             <Route path="tags" element={<TagManager />} />
+            <Route path="users" element={<UserManager />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

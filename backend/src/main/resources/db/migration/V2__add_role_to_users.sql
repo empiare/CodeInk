@@ -1,0 +1,3 @@
+ALTER TABLE users ADD COLUMN role VARCHAR(20) NOT NULL DEFAULT 'USER' AFTER avatar_url;
+
+UPDATE users SET role = 'ADMIN' WHERE id = 1;

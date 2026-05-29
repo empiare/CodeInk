@@ -9,7 +9,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   sql:
     init:
-      mode: never
+      mode: always
       schema-locations: classpath:schema.sql
       data-locations: classpath:data.sql
   security:
@@ -35,6 +35,11 @@ mybatis-plus:
 
 jwt:
   expiration: 86400000
+
+# 头像上传配置
+avatar:
+  upload-dir: ${AVATAR_UPLOAD_DIR:D:\\acode\\blog\\backend\\src\\main\\resources\\avatar}
+  base-url: ${AVATAR_BASE_URL:http://localhost:8080/avatar}
 
 # AI资讯翻译配置
 ai-news:

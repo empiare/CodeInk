@@ -1,22 +1,24 @@
 package com.myblog.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONArray;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
- * Google翻译服务（免费接口）
+ * 翻译服务（使用有道翻译免费接口）
  */
 @Slf4j
 @Service
 public class GoogleTranslationService {
 
-    private static final String TRANSLATE_URL = "https://translate.googleapis.com/translate_a/single";
+    // 有道翻译免费接口
+    private static final String YOUDAO_URL = "https://fanyi.youdao.com/translate?&doctype=json&type=AUTO2ZH_CN";
 
     @Value("${ai-news.translation.enabled:true}")
     private boolean translationEnabled;
@@ -39,22 +41,22 @@ public class GoogleTranslationService {
             return text;
         }
 
+        // 截断过长的文本
+        if (text.length() > 500) {
+            text = text.substring(0, 500);
+        }
+
         try {
-            String url = TRANSLATE_URL +
-                    "?client=gtx" +
-                    "&sl=en" +
-                    "&tl=zh-CN" +
-                    "&dt=t" +
-                    "&q=" + URLEncoder.encode(text, StandardCharsets.UTF_8);
+            String url = YOUDAO_URL + "&i=" + URLEncoder.encode(text, StandardCharsets.UTF_8);
 
             String response = Jsoup.connect(url)
                     .ignoreContentType(true)
-                    .timeout(10000)
+                    .timeout(15000)
                     .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
                     .execute()
                     .body();
 
-            return parseTranslationResponse(response);
+            return parseYoudaoResponse(response);
         } catch (Exception e) {
             log.warn("翻译失败，返回原文: {}", e.getMessage());
             return text;
@@ -62,29 +64,23 @@ public class GoogleTranslationService {
     }
 
     /**
-     * 批量翻译
+     * 解析有道翻译响应
      */
-    public void translateAiNewsFields(String[] titles, String[] summaries) {
-        // 可以实现批量翻译优化
-    }
-
-    /**
-     * 解析Google翻译响应
-     */
-    private String parseTranslationResponse(String response) {
+    private String parseYoudaoResponse(String response) {
         try {
-            JSONArray json = new JSONArray(response);
-            JSONArray sentences = json.getJSONArray(0);
+            // 响应格式: {"type":"AUTO2ZH_CN","errorCode":0,"elapsedTime":1,"translateResult":[[{"src":"hello","tgt":"你好"}]]}
+            Pattern pattern = Pattern.compile("\"tgt\":\"([^\"]+)\"");
+            Matcher matcher = pattern.matcher(response);
 
             StringBuilder result = new StringBuilder();
-            for (int i = 0; i < sentences.length(); i++) {
-                JSONArray sentence = sentences.getJSONArray(i);
-                if (!sentence.isNull(0)) {
-                    result.append(sentence.getString(0));
+            while (matcher.find()) {
+                if (result.length() > 0) {
+                    result.append(" ");
                 }
+                result.append(matcher.group(1));
             }
 
-            return result.toString();
+            return result.length() > 0 ? result.toString() : null;
         } catch (Exception e) {
             log.warn("解析翻译响应失败: {}", e.getMessage());
             return null;

@@ -1,6 +1,6 @@
 -- Admin user (password: admin123, BCrypt hashed)
-INSERT IGNORE INTO users (username, password, display_name) VALUES
-('admin', '$2b$12$biIxs9vsVYWFBdNb7VwlP.FQSJlOXwxvJtdr2SEJAWEGW6EnpPJ2O', '管理员');
+INSERT IGNORE INTO users (username, email, password, display_name, role) VALUES
+('admin', 'admin@example.com', '$2a$10$nN8inKecZ/UPv98zMcAT6eYq1AfJdTw4Q9VjIBKdhgJv4wvoLs252', '管理员', 'ADMIN');
 
 -- Categories
 INSERT IGNORE INTO categories (name, slug, description, sort_order) VALUES

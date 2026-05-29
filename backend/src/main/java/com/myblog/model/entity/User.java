@@ -15,6 +15,7 @@ public class User {
     private String googleId;
     private String displayName;
     private String avatarUrl;
+    private String role;
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;
 }

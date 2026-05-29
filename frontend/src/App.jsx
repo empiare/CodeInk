@@ -13,7 +13,7 @@ import News from './pages/News';
 import NotFound from './pages/NotFound';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import UserProfile from './pages/UserProfile';
+import Profile from './pages/Profile';
 import AuthCallback from './pages/AuthCallback';
 
 export default function App() {
@@ -33,7 +33,7 @@ export default function App() {
               <Route path="about" element={<About />} />
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
-              <Route path="profile" element={<UserProfile />} />
+              <Route path="profile" element={<Profile />} />
               <Route path="auth/callback" element={<AuthCallback />} />
               <Route path="*" element={<NotFound />} />
             </Route>

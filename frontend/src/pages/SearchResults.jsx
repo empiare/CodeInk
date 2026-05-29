@@ -5,6 +5,7 @@ import client from '../api/client';
 import { useCategories, useTags } from '../hooks';
 import ArticleItem from '../components/article/ArticleItem';
 import Pagination from '../components/common/Pagination';
+import CustomSelect from '../components/common/CustomSelect';
 
 export default function SearchResults() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -81,26 +82,24 @@ export default function SearchResults() {
               onChange={(e) => setKeyword(e.target.value)}
             />
           </div>
-          <select
-            className="px-3 py-2 text-sm bg-white dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded text-stone-900 dark:text-stone-200 outline-none focus:border-amber-700 dark:focus:border-amber-500 transition-colors cursor-pointer appearance-none"
+          <CustomSelect
+            placeholder="全部分类"
             value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            <option value="">全部分类</option>
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.slug}>{cat.name}</option>
-            ))}
-          </select>
-          <select
-            className="px-3 py-2 text-sm bg-white dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded text-stone-900 dark:text-stone-200 outline-none focus:border-amber-700 dark:focus:border-amber-500 transition-colors cursor-pointer appearance-none"
+            onChange={setCategory}
+            options={[
+              { value: '', label: '全部分类' },
+              ...categories.map((cat) => ({ value: cat.slug, label: cat.name })),
+            ]}
+          />
+          <CustomSelect
+            placeholder="全部标签"
             value={tag}
-            onChange={(e) => setTag(e.target.value)}
-          >
-            <option value="">全部标签</option>
-            {tags.map((t) => (
-              <option key={t.id} value={t.slug}>{t.name}</option>
-            ))}
-          </select>
+            onChange={setTag}
+            options={[
+              { value: '', label: '全部标签' },
+              ...tags.map((t) => ({ value: t.slug, label: t.name })),
+            ]}
+          />
           <button
             type="submit"
             className="px-4 py-2 text-sm bg-amber-700 dark:bg-amber-500 text-white rounded hover:bg-amber-800 dark:hover:bg-amber-600 transition-colors cursor-pointer border-none"

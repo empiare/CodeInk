@@ -44,47 +44,59 @@ export default function ArticleListAdmin() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-xl font-semibold mb-0">文章管理</h1>
-        <Link to="/articles/new" className="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-sm border rounded cursor-pointer transition-all bg-amber-700 dark:bg-amber-500 border-amber-700 dark:border-amber-500 text-white hover:opacity-85 no-underline hover:no-underline">
-          <Plus size={14} /> 新建文章
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-2xl font-bold mb-0 text-stone-900 dark:text-stone-100 tracking-tight">文章管理</h1>
+        <Link to="/articles/new" className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 text-base font-bold bg-gradient-to-b from-amber-700 to-amber-800 dark:from-amber-600 dark:to-amber-700 text-stone-900 dark:text-stone-100 rounded-xl shadow-sm hover:from-amber-800 hover:to-amber-900 dark:hover:from-amber-500 dark:hover:to-amber-600 hover:shadow-md active:scale-[0.98] transition-all no-underline hover:no-underline">
+          <Plus size={16} /> 新建文章
         </Link>
       </div>
 
       {loading ? (
         <div className="text-center py-12 text-stone-400 dark:text-stone-500 text-sm">加载中...</div>
       ) : (
-        <>
+        <div className="bg-white dark:bg-stone-900 rounded-2xl border border-stone-900/[0.06] dark:border-white/[0.06] shadow-[0_1px_3px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.2)] overflow-hidden">
           <table className="w-full border-collapse text-sm">
             <thead>
-              <tr>
-                <th className="text-left px-3 py-2.5 border-b border-stone-200 dark:border-stone-800 font-semibold text-stone-600 dark:text-stone-400 text-xs uppercase tracking-wider">标题</th>
-                <th className="text-left px-3 py-2.5 border-b border-stone-200 dark:border-stone-800 font-semibold text-stone-600 dark:text-stone-400 text-xs uppercase tracking-wider">分类</th>
-                <th className="text-left px-3 py-2.5 border-b border-stone-200 dark:border-stone-800 font-semibold text-stone-600 dark:text-stone-400 text-xs uppercase tracking-wider">状态</th>
-                <th className="text-left px-3 py-2.5 border-b border-stone-200 dark:border-stone-800 font-semibold text-stone-600 dark:text-stone-400 text-xs uppercase tracking-wider">日期</th>
-                <th className="text-left px-3 py-2.5 border-b border-stone-200 dark:border-stone-800 font-semibold text-stone-600 dark:text-stone-400 text-xs uppercase tracking-wider">操作</th>
+              <tr className="bg-stone-50 dark:bg-stone-800/50">
+                <th className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50 font-semibold text-stone-600 dark:text-stone-400 text-xs uppercase tracking-wider">标题</th>
+                <th className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50 font-semibold text-stone-600 dark:text-stone-400 text-xs uppercase tracking-wider">分类</th>
+                <th className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50 font-semibold text-stone-600 dark:text-stone-400 text-xs uppercase tracking-wider">状态</th>
+                <th className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50 font-semibold text-stone-600 dark:text-stone-400 text-xs uppercase tracking-wider">日期</th>
+                <th className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50 font-semibold text-stone-600 dark:text-stone-400 text-xs uppercase tracking-wider">操作</th>
               </tr>
             </thead>
             <tbody>
               {articles.map((article) => (
-                <tr key={article.id} className="hover:bg-stone-100 dark:hover:bg-stone-900">
-                  <td className="text-left px-3 py-2.5 border-b border-stone-200 dark:border-stone-800">{article.title}</td>
-                  <td className="text-left px-3 py-2.5 border-b border-stone-200 dark:border-stone-800">{article.category?.name || '-'}</td>
-                  <td className="text-left px-3 py-2.5 border-b border-stone-200 dark:border-stone-800">{article.published ? '已发布' : '草稿'}</td>
-                  <td className="text-left px-3 py-2.5 border-b border-stone-200 dark:border-stone-800">{article.createdAt ? new Date(article.createdAt).toLocaleDateString('zh-CN') : '-'}</td>
-                  <td className="text-left px-3 py-2.5 border-b border-stone-200 dark:border-stone-800">
-                    <div className="flex gap-1.5">
+                <tr key={article.id} className="hover:bg-stone-50 dark:hover:bg-stone-800/30 transition-colors">
+                  <td className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50 font-medium text-stone-900 dark:text-stone-100">{article.title}</td>
+                  <td className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50 text-stone-600 dark:text-stone-400">{article.category?.name || '-'}</td>
+                  <td className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50">
+                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
+                      article.published
+                        ? 'bg-green-50 dark:bg-green-500/10 text-green-700 dark:text-green-400'
+                        : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400'
+                    }`}>
+                      {article.published ? '已发布' : '草稿'}
+                    </span>
+                  </td>
+                  <td className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50 text-stone-500 dark:text-stone-400 text-xs">{article.createdAt ? new Date(article.createdAt).toLocaleDateString('zh-CN') : '-'}</td>
+                  <td className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50">
+                    <div className="flex justify-center gap-2">
                       <button
-                        className={`inline-flex items-center justify-center gap-1.5 px-2 py-1 text-xs border rounded cursor-pointer transition-all no-underline hover:no-underline ${article.featured ? 'text-amber-600 border-amber-600 hover:bg-amber-600 hover:text-white' : 'bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-stone-200 border-stone-200 dark:border-stone-800'}`}
+                        className={`inline-flex items-center justify-center gap-1 px-2.5 py-1.5 text-xs rounded-lg cursor-pointer transition-all ${
+                          article.featured
+                            ? 'bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-200/50 dark:border-amber-500/20'
+                            : 'bg-stone-50 dark:bg-stone-800 text-stone-600 dark:text-stone-400 border border-stone-200/70 dark:border-stone-700/50 hover:border-amber-300 dark:hover:border-amber-600 hover:text-amber-700 dark:hover:text-amber-400'
+                        }`}
                         onClick={() => handleFeature(article)}
                         title={article.featured ? '取消精选' : '设为精选'}
                       >
                         <Star size={12} fill={article.featured ? 'currentColor' : 'none'} /> {article.featured ? '取消精选' : '精选'}
                       </button>
-                      <Link to={`/articles/${article.id}/edit`} className="inline-flex items-center justify-center gap-1.5 px-2 py-1 text-xs border border-stone-200 dark:border-stone-800 rounded cursor-pointer transition-all bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-stone-200 no-underline hover:no-underline">
+                      <Link to={`/articles/${article.id}/edit`} className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 text-xs rounded-lg cursor-pointer transition-all bg-stone-50 dark:bg-stone-800 text-stone-600 dark:text-stone-400 border border-stone-200/70 dark:border-stone-700/50 hover:border-amber-300 dark:hover:border-amber-600 hover:text-amber-700 dark:hover:text-amber-400 no-underline hover:no-underline">
                         <Edit size={12} /> 编辑
                       </Link>
-                      <button className="inline-flex items-center justify-center gap-1.5 px-2 py-1 text-xs border rounded cursor-pointer transition-all text-red-600 border-red-600 hover:bg-red-600 hover:text-white" onClick={() => handleDelete(article.id)}>
+                      <button className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 text-xs rounded-lg cursor-pointer transition-all text-red-600 dark:text-red-400 border border-red-200/50 dark:border-red-500/20 hover:bg-red-50 dark:hover:bg-red-500/10" onClick={() => handleDelete(article.id)}>
                         <Trash2 size={12} /> 删除
                       </button>
                     </div>
@@ -93,8 +105,10 @@ export default function ArticleListAdmin() {
               ))}
             </tbody>
           </table>
-          <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
-        </>
+          <div className="px-4 py-3 border-t border-stone-200/50 dark:border-stone-700/50">
+            <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+          </div>
+        </div>
       )}
     </div>
   );

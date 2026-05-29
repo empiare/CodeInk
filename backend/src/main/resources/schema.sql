@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
     google_id VARCHAR(100) UNIQUE,
     display_name VARCHAR(100),
     avatar_url VARCHAR(500),
+    role VARCHAR(20) NOT NULL DEFAULT 'USER',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

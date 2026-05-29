@@ -64,6 +64,21 @@ public class AuthService {
         return result;
     }
 
+    public Map<String, Object> adminLogin(String email, String password) {
+        User user = userMapper.selectByEmail(email);
+        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
+            throw new IllegalArgumentException("邮箱或密码错误");
+        }
+        if (!"ADMIN".equals(user.getRole())) {
+            throw new IllegalArgumentException("无权限访问管理后台");
+        }
+        String token = jwtUtil.generateToken(user.getEmail());
+        Map<String, Object> result = new HashMap<>();
+        result.put("token", token);
+        result.put("user", buildUserInfo(user));
+        return result;
+    }
+
     public Map<String, Object> googleLogin(String idTokenString) {
         try {
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
@@ -127,6 +142,7 @@ public class AuthService {
         info.put("email", user.getEmail());
         info.put("displayName", user.getDisplayName());
         info.put("avatarUrl", user.getAvatarUrl());
+        info.put("role", user.getRole());
         info.put("createdAt", user.getCreatedAt());
         return info;
     }

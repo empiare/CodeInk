@@ -1,6 +1,6 @@
 import { Outlet, NavLink, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, FileText, FolderOpen, Tags, LogOut, ExternalLink } from 'lucide-react';
+import { LayoutDashboard, FileText, FolderOpen, Tags, Users, LogOut, ExternalLink } from 'lucide-react';
 
 export default function AdminLayout() {
   const { isAuthenticated, loading, logout } = useAuth();
@@ -9,50 +9,63 @@ export default function AdminLayout() {
   if (!isAuthenticated) return <Navigate to="/login" replace />;
 
   const navLinkClass = ({ isActive }) =>
-    isActive
-      ? "block px-2 py-1.5 text-sm rounded no-underline transition-colors bg-white dark:bg-stone-950 text-stone-900 dark:text-stone-200"
-      : "block px-2 py-1.5 text-sm text-stone-600 dark:text-stone-400 rounded no-underline transition-colors hover:bg-white dark:hover:bg-stone-950 hover:text-stone-900 dark:hover:text-stone-200";
+    `flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm no-underline transition-all duration-200 ${
+      isActive
+        ? 'bg-white/80 dark:bg-white/[0.08] text-stone-900 dark:text-stone-100 shadow-sm font-medium'
+        : 'text-stone-600 dark:text-stone-400 hover:bg-white/50 dark:hover:bg-white/[0.04] hover:text-stone-900 dark:hover:text-stone-200'
+    }`;
 
   return (
-    <div className="flex min-h-screen">
-      <aside className="w-[200px] bg-stone-100 dark:bg-stone-900 border-r border-stone-200 dark:border-stone-800 px-4 py-6 shrink-0">
-        <div className="font-serif text-base font-semibold mb-6 pb-3 border-b border-stone-200 dark:border-stone-800">管理后台</div>
-        <nav className="flex flex-col gap-1">
+    <div className="flex min-h-screen flex-col">
+      <header className="bg-white/60 dark:bg-stone-900/50 backdrop-blur-xl border-b border-stone-900/[0.06] dark:border-white/[0.04] px-6 py-3 shrink-0">
+        <div className="text-lg font-bold text-stone-900 dark:text-stone-100 tracking-tight">
+          Code<span className="text-amber-600 dark:text-amber-400">Ink</span>
+          <span className="text-xs font-normal text-stone-400 dark:text-stone-500 ml-1.5">管理后台</span>
+        </div>
+      </header>
+      <div className="flex flex-1">
+        <aside className="w-[220px] bg-white/60 dark:bg-stone-900/50 backdrop-blur-xl border-r border-stone-900/[0.06] dark:border-white/[0.04] px-4 py-6 shrink-0 flex flex-col">
+          <nav className="flex flex-col gap-1 flex-1">
           <NavLink to="/" end className={navLinkClass}>
-            <LayoutDashboard size={14} className="inline-block align-middle mr-1.5" />
+            <LayoutDashboard size={16} />
             仪表盘
           </NavLink>
           <NavLink to="/articles" className={navLinkClass}>
-            <FileText size={14} className="inline-block align-middle mr-1.5" />
+            <FileText size={16} />
             文章管理
           </NavLink>
           <NavLink to="/categories" className={navLinkClass}>
-            <FolderOpen size={14} className="inline-block align-middle mr-1.5" />
+            <FolderOpen size={16} />
             分类管理
           </NavLink>
           <NavLink to="/tags" className={navLinkClass}>
-            <Tags size={14} className="inline-block align-middle mr-1.5" />
+            <Tags size={16} />
             标签管理
           </NavLink>
+          <NavLink to="/users" className={navLinkClass}>
+            <Users size={16} />
+            用户管理
+          </NavLink>
         </nav>
-        <div className="mt-8 border-t border-stone-200 dark:border-stone-800 pt-4">
+        <div className="mt-auto border-t border-stone-200/50 dark:border-stone-800/50 pt-4 flex flex-col gap-2">
           <a href="/" target="_blank" rel="noopener noreferrer"
-             className="flex items-center gap-1.5 text-sm text-stone-600 dark:text-stone-400 mb-3 no-underline hover:text-stone-900 dark:hover:text-stone-200 transition-colors">
-            <ExternalLink size={14} />
+             className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm text-stone-600 dark:text-stone-400 no-underline hover:bg-stone-50 dark:hover:bg-white/[0.04] hover:text-stone-900 dark:hover:text-stone-200 transition-all">
+            <ExternalLink size={16} />
             查看博客
           </a>
           <button
             onClick={logout}
-            className="flex items-center gap-1.5 text-sm text-stone-600 dark:text-stone-400 bg-transparent border-none cursor-pointer p-0 hover:text-stone-900 dark:hover:text-stone-200 transition-colors"
+            className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm text-stone-600 dark:text-stone-400 bg-transparent border-none cursor-pointer hover:bg-stone-50 dark:hover:bg-white/[0.04] hover:text-red-600 dark:hover:text-red-400 transition-all"
           >
-            <LogOut size={14} />
+            <LogOut size={16} />
             退出登录
           </button>
         </div>
       </aside>
-      <main className="flex-1 px-8 py-6 overflow-x-auto">
+      <main className="flex-1 px-8 py-6 overflow-x-auto bg-stone-50 dark:bg-stone-950">
         <Outlet />
       </main>
+      </div>
     </div>
   );
 }

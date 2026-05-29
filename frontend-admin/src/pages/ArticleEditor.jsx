@@ -84,11 +84,11 @@ export default function ArticleEditor() {
   };
 
   return (
-    <div>
-      <h1 className="text-xl font-semibold mb-6">{isEdit ? '编辑文章' : '新建文章'}</h1>
+    <div className="h-[calc(100vh-3rem)] flex flex-col">
+      <h1 className="text-xl font-semibold mb-6 shrink-0">{isEdit ? '编辑文章' : '新建文章'}</h1>
 
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
+      <form onSubmit={handleSubmit} className="flex-1 flex flex-col overflow-hidden">
+        <div className="mb-4 shrink-0">
           <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 mb-1.5">标题</label>
           <input
             type="text"
@@ -99,7 +99,7 @@ export default function ArticleEditor() {
           />
         </div>
 
-        <div className="mb-4">
+        <div className="mb-4 shrink-0">
           <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 mb-1.5">摘要</label>
           <input
             type="text"
@@ -110,7 +110,7 @@ export default function ArticleEditor() {
           />
         </div>
 
-        <div className="flex gap-4 mb-4">
+        <div className="flex gap-4 mb-4 shrink-0">
           <div className="mb-4 flex-1">
             <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 mb-1.5">分类</label>
             <select
@@ -137,7 +137,7 @@ export default function ArticleEditor() {
         </div>
 
         {tags.length > 0 && (
-          <div className="mb-4">
+          <div className="mb-4 shrink-0">
             <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 mb-1.5">标签</label>
             <div className="flex flex-wrap gap-2">
               {tags.map((tag) => (
@@ -155,30 +155,30 @@ export default function ArticleEditor() {
           </div>
         )}
 
-        <div className="mb-4">
+        <div className="mb-4 flex-1 min-h-0">
           <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 mb-1.5">内容（Markdown）</label>
-          <div className="grid grid-cols-2 gap-4 mt-4">
-            <div className="border border-stone-200 dark:border-stone-800 rounded overflow-hidden">
-              <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-stone-400 dark:text-stone-500 bg-stone-100 dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800">编辑</div>
-              <div className="p-4 min-h-[400px] overflow-y-auto">
+          <div className="grid grid-cols-2 gap-4 mt-4 h-[calc(100%-2rem)]">
+            <div className="border border-stone-200 dark:border-stone-800 rounded overflow-hidden flex flex-col">
+              <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-stone-400 dark:text-stone-500 bg-stone-100 dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 shrink-0">编辑</div>
+              <div className="p-4 flex-1 overflow-y-auto">
                 <textarea
-                  className="w-full h-full min-h-[400px] p-0 border-none resize-none font-mono text-xs leading-relaxed bg-transparent text-stone-900 dark:text-stone-200 outline-none"
+                  className="w-full h-full p-0 border-none resize-none font-mono text-xs leading-relaxed bg-transparent text-stone-900 dark:text-stone-200 outline-none"
                   value={form.content}
                   onChange={(e) => update('content', e.target.value)}
                   placeholder="使用 Markdown 编写文章内容..."
                 />
               </div>
             </div>
-            <div className="border border-stone-200 dark:border-stone-800 rounded overflow-hidden">
-              <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-stone-400 dark:text-stone-500 bg-stone-100 dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800">预览</div>
-              <div className="p-4 min-h-[400px] overflow-y-auto [&_.article-body]:text-[15px]">
+            <div className="border border-stone-200 dark:border-stone-800 rounded overflow-hidden flex flex-col">
+              <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-stone-400 dark:text-stone-500 bg-stone-100 dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 shrink-0">预览</div>
+              <div className="p-4 flex-1 overflow-y-auto [&_.article-body]:text-[10px]">
                 <MarkdownRenderer content={form.content} />
               </div>
             </div>
           </div>
         </div>
 
-        <div className="flex gap-6 my-4">
+        <div className="flex justify-end gap-6 my-4 shrink-0">
           <label className="flex items-center gap-2 text-sm">
             <input
               type="checkbox"
@@ -197,9 +197,9 @@ export default function ArticleEditor() {
           </label>
         </div>
 
-        {error && <p className="text-red-600 text-xs mt-1">{error}</p>}
+        {error && <p className="text-red-600 text-xs mt-1 shrink-0">{error}</p>}
 
-        <div className="flex gap-2 mt-4">
+        <div className="flex justify-end gap-2 mt-4 shrink-0 pb-4">
           <button type="submit" className="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-sm border rounded cursor-pointer transition-all bg-amber-700 dark:bg-amber-500 border-amber-700 dark:border-amber-500 text-white hover:opacity-85 no-underline hover:no-underline" disabled={saving}>
             {saving ? '保存中...' : '保存文章'}
           </button>

@@ -31,15 +31,23 @@ public interface ArticleMapper extends BaseMapper<Article> {
     @Select("SELECT a.* FROM articles a WHERE a.category_id = #{categoryId} AND a.is_published = 1 ORDER BY a.published_at DESC")
     IPage<Article> selectByCategoryId(Page<Article> page, @Param("categoryId") Long categoryId);
 
-    @Select("SELECT a.* FROM articles a WHERE a.is_published = 1 " +
-            "AND (a.title LIKE CONCAT('%',#{keyword},'%') OR a.summary LIKE CONCAT('%',#{keyword},'%')) " +
+    @Select("SELECT DISTINCT a.* FROM articles a WHERE a.is_published = 1 " +
+            "AND (a.title LIKE CONCAT('%',#{keyword},'%') " +
+            "OR a.summary LIKE CONCAT('%',#{keyword},'%') " +
+            "OR a.content LIKE CONCAT('%',#{keyword},'%') " +
+            "OR a.id IN (SELECT at2.article_id FROM article_tags at2 JOIN tags t ON at2.tag_id = t.id WHERE t.name LIKE CONCAT('%',#{keyword},'%')) " +
+            "OR a.category_id IN (SELECT c.id FROM categories c WHERE c.name LIKE CONCAT('%',#{keyword},'%'))) " +
             "ORDER BY a.published_at DESC")
     IPage<Article> search(Page<Article> page, @Param("keyword") String keyword);
 
     @Select("<script>" +
-            "SELECT a.* FROM articles a WHERE a.is_published = 1 " +
+            "SELECT DISTINCT a.* FROM articles a WHERE a.is_published = 1 " +
             "<if test='keyword != null and keyword != \"\"'>" +
-            "AND (a.title LIKE CONCAT('%',#{keyword},'%') OR a.summary LIKE CONCAT('%',#{keyword},'%'))" +
+            "AND (a.title LIKE CONCAT('%',#{keyword},'%') " +
+            "OR a.summary LIKE CONCAT('%',#{keyword},'%') " +
+            "OR a.content LIKE CONCAT('%',#{keyword},'%') " +
+            "OR a.id IN (SELECT at2.article_id FROM article_tags at2 JOIN tags t ON at2.tag_id = t.id WHERE t.name LIKE CONCAT('%',#{keyword},'%')) " +
+            "OR a.category_id IN (SELECT c.id FROM categories c WHERE c.name LIKE CONCAT('%',#{keyword},'%')))" +
             "</if>" +
             "<if test='categorySlug != null and categorySlug != \"\"'>" +
             "AND a.category_id IN (SELECT id FROM categories WHERE slug = #{categorySlug})" +
