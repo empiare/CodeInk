@@ -1,0 +1,47 @@
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.log
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Maven
+.mvn/
+mvnw
+mvnw.cmd
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build output
+dist/
+build/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Database
+*.sql.bak
+
+# Session files
+*.session.sql
