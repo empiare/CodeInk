@@ -9,10 +9,14 @@ export default function Pagination({ page, totalPages, onPageChange }) {
     pages.push(i);
   }
 
+  const btnClass = "inline-flex items-center justify-center min-w-8 h-8 px-2 text-xs border rounded cursor-pointer transition-colors disabled:opacity-40 disabled:cursor-not-allowed";
+  const inactiveClass = "text-stone-600 dark:text-stone-400 bg-transparent border-stone-200 dark:border-stone-800 hover:border-amber-700 dark:hover:border-amber-500 hover:text-amber-700 dark:hover:text-amber-400";
+  const activeClass = "text-white bg-amber-700 dark:bg-amber-500 border-amber-700 dark:border-amber-500";
+
   return (
-    <nav className="pagination">
+    <nav className="flex justify-center items-center gap-1 my-8">
       <button
-        className="pagination__btn"
+        className={`${btnClass} ${inactiveClass}`}
         onClick={() => onPageChange(page - 1)}
         disabled={page === 0}
       >
@@ -20,14 +24,14 @@ export default function Pagination({ page, totalPages, onPageChange }) {
       </button>
       {start > 0 && (
         <>
-          <button className="pagination__btn" onClick={() => onPageChange(0)}>1</button>
-          {start > 1 && <span style={{ color: 'var(--text-tertiary)', fontSize: '0.8125rem' }}>...</span>}
+          <button className={`${btnClass} ${inactiveClass}`} onClick={() => onPageChange(0)}>1</button>
+          {start > 1 && <span className="text-stone-400 dark:text-stone-500 text-xs">...</span>}
         </>
       )}
       {pages.map((p) => (
         <button
           key={p}
-          className={`pagination__btn ${p === page ? 'pagination__btn--active' : ''}`}
+          className={`${btnClass} ${p === page ? activeClass : inactiveClass}`}
           onClick={() => onPageChange(p)}
         >
           {p + 1}
@@ -35,14 +39,14 @@ export default function Pagination({ page, totalPages, onPageChange }) {
       ))}
       {end < totalPages - 1 && (
         <>
-          {end < totalPages - 2 && <span style={{ color: 'var(--text-tertiary)', fontSize: '0.8125rem' }}>...</span>}
-          <button className="pagination__btn" onClick={() => onPageChange(totalPages - 1)}>
+          {end < totalPages - 2 && <span className="text-stone-400 dark:text-stone-500 text-xs">...</span>}
+          <button className={`${btnClass} ${inactiveClass}`} onClick={() => onPageChange(totalPages - 1)}>
             {totalPages}
           </button>
         </>
       )}
       <button
-        className="pagination__btn"
+        className={`${btnClass} ${inactiveClass}`}
         onClick={() => onPageChange(page + 1)}
         disabled={page >= totalPages - 1}
       >

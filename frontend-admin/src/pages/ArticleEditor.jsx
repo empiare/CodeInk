@@ -85,36 +85,36 @@ export default function ArticleEditor() {
 
   return (
     <div>
-      <h1 className="admin-page-title">{isEdit ? '编辑文章' : '新建文章'}</h1>
+      <h1 className="text-xl font-semibold mb-6">{isEdit ? '编辑文章' : '新建文章'}</h1>
 
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label className="form-label">标题</label>
+        <div className="mb-4">
+          <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 mb-1.5">标题</label>
           <input
             type="text"
-            className="form-input"
+            className="w-full px-3 py-2 text-sm bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded text-stone-900 dark:text-stone-200 outline-none focus:border-amber-700 dark:focus:border-amber-500 transition-colors"
             value={form.title}
             onChange={(e) => update('title', e.target.value)}
             placeholder="文章标题"
           />
         </div>
 
-        <div className="form-group">
-          <label className="form-label">摘要</label>
+        <div className="mb-4">
+          <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 mb-1.5">摘要</label>
           <input
             type="text"
-            className="form-input"
+            className="w-full px-3 py-2 text-sm bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded text-stone-900 dark:text-stone-200 outline-none focus:border-amber-700 dark:focus:border-amber-500 transition-colors"
             value={form.summary}
             onChange={(e) => update('summary', e.target.value)}
             placeholder="文章摘要（可选）"
           />
         </div>
 
-        <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-          <div className="form-group" style={{ flex: 1 }}>
-            <label className="form-label">分类</label>
+        <div className="flex gap-4 mb-4">
+          <div className="mb-4 flex-1">
+            <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 mb-1.5">分类</label>
             <select
-              className="form-select"
+              className="w-full px-3 py-2 text-sm bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded text-stone-900 dark:text-stone-200 outline-none focus:border-amber-700 dark:focus:border-amber-500 transition-colors"
               value={form.categoryId}
               onChange={(e) => update('categoryId', e.target.value)}
             >
@@ -124,11 +124,11 @@ export default function ArticleEditor() {
               ))}
             </select>
           </div>
-          <div className="form-group" style={{ flex: 1 }}>
-            <label className="form-label">封面图 URL（可选）</label>
+          <div className="mb-4 flex-1">
+            <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 mb-1.5">封面图 URL（可选）</label>
             <input
               type="text"
-              className="form-input"
+              className="w-full px-3 py-2 text-sm bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded text-stone-900 dark:text-stone-200 outline-none focus:border-amber-700 dark:focus:border-amber-500 transition-colors"
               value={form.coverImage}
               onChange={(e) => update('coverImage', e.target.value)}
               placeholder="https://..."
@@ -137,16 +137,16 @@ export default function ArticleEditor() {
         </div>
 
         {tags.length > 0 && (
-          <div className="form-group">
-            <label className="form-label">标签</label>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+          <div className="mb-4">
+            <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 mb-1.5">标签</label>
+            <div className="flex flex-wrap gap-2">
               {tags.map((tag) => (
-                <label key={tag.id} className="tag" style={{ cursor: 'pointer', opacity: form.tagIds.includes(tag.id) ? 1 : 0.5 }}>
+                <label key={tag.id} className="inline-block text-xs text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-950 px-2 py-0.5 rounded-sm hover:opacity-80 transition-opacity cursor-pointer" style={{ opacity: form.tagIds.includes(tag.id) ? 1 : 0.5 }}>
                   <input
                     type="checkbox"
                     checked={form.tagIds.includes(tag.id)}
                     onChange={() => handleTagToggle(tag.id)}
-                    style={{ marginRight: '0.25rem' }}
+                    className="mr-1"
                   />
                   {tag.name}
                 </label>
@@ -155,31 +155,31 @@ export default function ArticleEditor() {
           </div>
         )}
 
-        <div className="form-group">
-          <label className="form-label">内容（Markdown）</label>
-          <div className="editor-layout">
-            <div className="editor-pane">
-              <div className="editor-pane__header">编辑</div>
-              <div className="editor-pane__body">
+        <div className="mb-4">
+          <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 mb-1.5">内容（Markdown）</label>
+          <div className="grid grid-cols-2 gap-4 mt-4">
+            <div className="border border-stone-200 dark:border-stone-800 rounded overflow-hidden">
+              <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-stone-400 dark:text-stone-500 bg-stone-100 dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800">编辑</div>
+              <div className="p-4 min-h-[400px] overflow-y-auto">
                 <textarea
-                  className="editor-textarea"
+                  className="w-full h-full min-h-[400px] p-0 border-none resize-none font-mono text-xs leading-relaxed bg-transparent text-stone-900 dark:text-stone-200 outline-none"
                   value={form.content}
                   onChange={(e) => update('content', e.target.value)}
                   placeholder="使用 Markdown 编写文章内容..."
                 />
               </div>
             </div>
-            <div className="editor-pane">
-              <div className="editor-pane__header">预览</div>
-              <div className="editor-pane__body editor-preview">
+            <div className="border border-stone-200 dark:border-stone-800 rounded overflow-hidden">
+              <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-stone-400 dark:text-stone-500 bg-stone-100 dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800">预览</div>
+              <div className="p-4 min-h-[400px] overflow-y-auto [&_.article-body]:text-[15px]">
                 <MarkdownRenderer content={form.content} />
               </div>
             </div>
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '1.5rem', margin: '1rem 0' }}>
-          <label className="form-checkbox">
+        <div className="flex gap-6 my-4">
+          <label className="flex items-center gap-2 text-sm">
             <input
               type="checkbox"
               checked={form.published}
@@ -187,7 +187,7 @@ export default function ArticleEditor() {
             />
             发布
           </label>
-          <label className="form-checkbox">
+          <label className="flex items-center gap-2 text-sm">
             <input
               type="checkbox"
               checked={form.featured}
@@ -197,13 +197,13 @@ export default function ArticleEditor() {
           </label>
         </div>
 
-        {error && <p className="error-msg">{error}</p>}
+        {error && <p className="text-red-600 text-xs mt-1">{error}</p>}
 
-        <div className="btn-group">
-          <button type="submit" className="btn btn--primary" disabled={saving}>
+        <div className="flex gap-2 mt-4">
+          <button type="submit" className="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-sm border rounded cursor-pointer transition-all bg-amber-700 dark:bg-amber-500 border-amber-700 dark:border-amber-500 text-white hover:opacity-85 no-underline hover:no-underline" disabled={saving}>
             {saving ? '保存中...' : '保存文章'}
           </button>
-          <button type="button" className="btn" onClick={() => navigate('/articles')}>
+          <button type="button" className="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-sm border border-stone-200 dark:border-stone-800 rounded cursor-pointer transition-all bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-stone-200 no-underline hover:no-underline" onClick={() => navigate('/articles')}>
             取消
           </button>
         </div>

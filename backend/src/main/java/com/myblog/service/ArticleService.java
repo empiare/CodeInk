@@ -37,7 +37,7 @@ public class ArticleService {
     private TagMapper tagMapper;
 
     public IPage<ArticleSummaryDTO> getPublishedPage(int page, int size) {
-        IPage<Article> pageResult = articleMapper.selectPublishedPage(new Page<>(page, size));
+        IPage<Article> pageResult = articleMapper.selectPublishedPage(new Page<>(page + 1, size));
         return pageResult.convert(this::toSummaryDTO);
     }
 
@@ -63,24 +63,28 @@ public class ArticleService {
         Category category = categoryMapper.selectOne(
                 new LambdaQueryWrapper<Category>().eq(Category::getSlug, slug));
         if (category == null) throw new ResourceNotFoundException("分类不存在");
-        return articleMapper.selectByCategoryId(new Page<>(page, size), category.getId())
+        return articleMapper.selectByCategoryId(new Page<>(page + 1, size), category.getId())
                 .convert(this::toSummaryDTO);
     }
 
     public IPage<ArticleSummaryDTO> getByTagSlug(String slug, int page, int size) {
         Tag tag = tagMapper.selectOne(new LambdaQueryWrapper<Tag>().eq(Tag::getSlug, slug));
         if (tag == null) throw new ResourceNotFoundException("标签不存在");
-        return articleMapper.selectByTagId(new Page<>(page, size), tag.getId())
+        return articleMapper.selectByTagId(new Page<>(page + 1, size), tag.getId())
                 .convert(this::toSummaryDTO);
     }
 
     public IPage<ArticleSummaryDTO> search(String keyword, int page, int size) {
-        return articleMapper.search(new Page<>(page, size), keyword).convert(this::toSummaryDTO);
+        return articleMapper.search(new Page<>(page + 1, size), keyword).convert(this::toSummaryDTO);
+    }
+
+    public IPage<ArticleSummaryDTO> advancedSearch(String keyword, String categorySlug, String tagSlug, int page, int size) {
+        return articleMapper.advancedSearch(new Page<>(page + 1, size), keyword, categorySlug, tagSlug).convert(this::toSummaryDTO);
     }
 
     public IPage<ArticleSummaryDTO> getAllPage(int page, int size) {
         IPage<Article> pageResult = articleMapper.selectPage(
-                new Page<>(page, size),
+                new Page<>(page + 1, size),
                 new LambdaQueryWrapper<Article>().orderByDesc(Article::getCreatedAt));
         return pageResult.convert(this::toSummaryDTO);
     }
@@ -122,6 +126,24 @@ public class ArticleService {
         articleMapper.updateById(article);
         articleTagMapper.deleteByArticleId(id);
         saveArticleTags(id, dto.getTagIds());
+        return toDetailDTO(article);
+    }
+
+    @Transactional
+    public ArticleDTO feature(Long id, boolean featured) {
+        Article article = articleMapper.selectById(id);
+        if (article == null) throw new ResourceNotFoundException("文章不存在");
+
+        if (featured) {
+            long count = articleMapper.selectCount(
+                    new LambdaQueryWrapper<Article>()
+                            .eq(Article::getIsFeatured, true)
+                            .ne(Article::getId, id));
+            if (count >= 8) throw new IllegalStateException("精选文章最多8条");
+        }
+
+        article.setIsFeatured(featured);
+        articleMapper.updateById(article);
         return toDetailDTO(article);
     }
 

@@ -28,8 +28,8 @@ export default function AuthCallback() {
   }, [searchParams, navigate, setUser]);
 
   return (
-    <div className="auth-page">
-      <div className="auth-card">
+    <div className="flex justify-center items-center min-h-[calc(100vh-200px)] py-8 px-8">
+      <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded p-8 w-full max-w-[400px] shadow-md">
         <p>正在登录中...</p>
       </div>
     </div>

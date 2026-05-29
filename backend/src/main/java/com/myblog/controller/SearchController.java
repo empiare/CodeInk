@@ -21,4 +21,14 @@ public class SearchController {
             @RequestParam(defaultValue = "10") int size) {
         return ApiResponse.ok(articleService.search(q, page, size));
     }
+
+    @GetMapping("/advanced")
+    public ApiResponse<IPage<ArticleSummaryDTO>> advancedSearch(
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String tag,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ApiResponse.ok(articleService.advancedSearch(q, category, tag, page, size));
+    }
 }

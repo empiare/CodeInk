@@ -61,50 +61,50 @@ export default function CategoryManager() {
 
   return (
     <div>
-      <h1 className="admin-page-title">分类管理</h1>
+      <h1 className="text-xl font-semibold mb-6">分类管理</h1>
 
-      <form onSubmit={handleSubmit} style={{ marginBottom: '2rem', maxWidth: '400px' }}>
-        <div className="form-group">
-          <label className="form-label">分类名称</label>
-          <input type="text" className="form-input" value={name} onChange={(e) => setName(e.target.value)} />
+      <form onSubmit={handleSubmit} className="mb-8 max-w-[400px]">
+        <div className="mb-4">
+          <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 mb-1.5">分类名称</label>
+          <input type="text" className="w-full px-3 py-2 text-sm bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded text-stone-900 dark:text-stone-200 outline-none focus:border-amber-700 dark:focus:border-amber-500 transition-colors" value={name} onChange={(e) => setName(e.target.value)} />
         </div>
-        <div className="form-group">
-          <label className="form-label">描述（可选）</label>
-          <input type="text" className="form-input" value={description} onChange={(e) => setDescription(e.target.value)} />
+        <div className="mb-4">
+          <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 mb-1.5">描述（可选）</label>
+          <input type="text" className="w-full px-3 py-2 text-sm bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded text-stone-900 dark:text-stone-200 outline-none focus:border-amber-700 dark:focus:border-amber-500 transition-colors" value={description} onChange={(e) => setDescription(e.target.value)} />
         </div>
-        {error && <p className="error-msg">{error}</p>}
-        <div className="btn-group">
-          <button type="submit" className="btn btn--primary">
+        {error && <p className="text-red-600 text-xs mt-1">{error}</p>}
+        <div className="flex gap-2 mt-4">
+          <button type="submit" className="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-sm border rounded cursor-pointer transition-all bg-amber-700 dark:bg-amber-500 border-amber-700 dark:border-amber-500 text-white hover:opacity-85 no-underline hover:no-underline">
             <Plus size={14} /> {editId ? '更新' : '添加'}
           </button>
           {editId && (
-            <button type="button" className="btn" onClick={resetForm}>取消</button>
+            <button type="button" className="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-sm border border-stone-200 dark:border-stone-800 rounded cursor-pointer transition-all bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-stone-200 no-underline hover:no-underline" onClick={resetForm}>取消</button>
           )}
         </div>
       </form>
 
       {loading ? (
-        <div className="loading">加载中...</div>
+        <div className="text-center py-12 text-stone-400 dark:text-stone-500 text-sm">加载中...</div>
       ) : (
-        <table className="admin-table" style={{ maxWidth: '500px' }}>
+        <table className="w-full border-collapse text-sm max-w-[500px]">
           <thead>
             <tr>
-              <th>名称</th>
-              <th>描述</th>
-              <th>操作</th>
+              <th className="text-left px-3 py-2.5 border-b border-stone-200 dark:border-stone-800 font-semibold text-stone-600 dark:text-stone-400 text-xs uppercase tracking-wider">名称</th>
+              <th className="text-left px-3 py-2.5 border-b border-stone-200 dark:border-stone-800 font-semibold text-stone-600 dark:text-stone-400 text-xs uppercase tracking-wider">描述</th>
+              <th className="text-left px-3 py-2.5 border-b border-stone-200 dark:border-stone-800 font-semibold text-stone-600 dark:text-stone-400 text-xs uppercase tracking-wider">操作</th>
             </tr>
           </thead>
           <tbody>
             {categories.map((cat) => (
-              <tr key={cat.id}>
-                <td>{cat.name}</td>
-                <td>{cat.description || '-'}</td>
-                <td>
-                  <div style={{ display: 'flex', gap: '0.375rem' }}>
-                    <button className="btn btn--sm" onClick={() => handleEdit(cat)}>
+              <tr key={cat.id} className="hover:bg-stone-100 dark:hover:bg-stone-900">
+                <td className="text-left px-3 py-2.5 border-b border-stone-200 dark:border-stone-800">{cat.name}</td>
+                <td className="text-left px-3 py-2.5 border-b border-stone-200 dark:border-stone-800">{cat.description || '-'}</td>
+                <td className="text-left px-3 py-2.5 border-b border-stone-200 dark:border-stone-800">
+                  <div className="flex gap-1.5">
+                    <button className="inline-flex items-center justify-center gap-1.5 px-2 py-1 text-xs border border-stone-200 dark:border-stone-800 rounded cursor-pointer transition-all bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-stone-200 no-underline hover:no-underline" onClick={() => handleEdit(cat)}>
                       <Edit size={12} /> 编辑
                     </button>
-                    <button className="btn btn--sm btn--danger" onClick={() => handleDelete(cat.id)}>
+                    <button className="inline-flex items-center justify-center gap-1.5 px-2 py-1 text-xs border rounded cursor-pointer transition-all text-red-600 border-red-600 hover:bg-red-600 hover:text-white" onClick={() => handleDelete(cat.id)}>
                       <Trash2 size={12} /> 删除
                     </button>
                   </div>

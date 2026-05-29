@@ -3,6 +3,7 @@ package com.myblog.service;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.jsoup.Jsoup;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.net.URLEncoder;
@@ -17,11 +18,19 @@ public class GoogleTranslationService {
 
     private static final String TRANSLATE_URL = "https://translate.googleapis.com/translate_a/single";
 
+    @Value("${ai-news.translation.enabled:true}")
+    private boolean translationEnabled;
+
     /**
      * 将英文翻译成中文
      */
     public String translateToChinese(String text) {
         if (text == null || text.trim().isEmpty()) {
+            return text;
+        }
+
+        // 如果翻译功能未启用，直接返回原文
+        if (!translationEnabled) {
             return text;
         }
 

@@ -58,13 +58,13 @@ export default function CommentSection({ articleId }) {
   const rootComments = comments.filter((c) => !c.parentId);
 
   return (
-    <section className="comments">
-      <h3 className="comments__title">评论 ({comments.length})</h3>
+    <section className="mt-12 pt-8 border-t border-stone-200 dark:border-stone-800">
+      <h3 className="text-base font-semibold mb-6">评论 ({comments.length})</h3>
 
       {loading ? (
-        <div className="loading">加载中...</div>
+        <div className="text-center py-12 text-stone-400 dark:text-stone-500 text-sm">加载中...</div>
       ) : rootComments.length === 0 ? (
-        <p style={{ color: 'var(--text-tertiary)', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
+        <p className="text-stone-400 dark:text-stone-500 text-sm mb-6">
           还没有评论，来说点什么吧
         </p>
       ) : (

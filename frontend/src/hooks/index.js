@@ -8,7 +8,7 @@ const USE_SAMPLE_DATA = false;
 const simulateDelay = (data, delay = 300) =>
   new Promise((resolve) => setTimeout(() => resolve(data), delay));
 
-export function useArticles({ page = 0, size = 10, category, tag } = {}) {
+export function useArticles({ page = 0, size = 10, category, tag, keyword } = {}) {
   const [data, setData] = useState({ content: [], totalElements: 0, totalPages: 0 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,6 +18,10 @@ export function useArticles({ page = 0, size = 10, category, tag } = {}) {
 
     if (USE_SAMPLE_DATA) {
       let filtered = [...sampleArticles];
+      if (keyword) {
+        const kw = keyword.toLowerCase();
+        filtered = filtered.filter((a) => a.title?.toLowerCase().includes(kw) || a.summary?.toLowerCase().includes(kw));
+      }
       if (category) filtered = filtered.filter((a) => a.category?.slug === category);
       if (tag) filtered = filtered.filter((a) => a.tags?.some((t) => t.slug === tag));
       const content = filtered.slice(page * size, page * size + size);
@@ -33,22 +37,37 @@ export function useArticles({ page = 0, size = 10, category, tag } = {}) {
       return;
     }
 
-    let url = `/articles?page=${page}&size=${size}`;
-    if (category) url = `/articles/category/${category}?page=${page}&size=${size}`;
-    if (tag) url = `/articles/tag/${tag}?page=${page}&size=${size}`;
+    if (keyword || category || tag) {
+      const params = new URLSearchParams({ page, size });
+      if (keyword) params.set('q', keyword);
+      if (category) params.set('category', category);
+      if (tag) params.set('tag', tag);
 
-    client.get(url)
-      .then((res) => {
-        setData({
-          content: res.content || res.records || [],
-          totalElements: res.totalElements ?? res.total ?? 0,
-          totalPages: res.totalPages ?? res.pages ?? 0,
-        });
-        setError(null);
-      })
-      .catch((err) => setError(err))
-      .finally(() => setLoading(false));
-  }, [page, size, category, tag]);
+      client.get(`/search/advanced?${params.toString()}`)
+        .then((res) => {
+          setData({
+            content: res.content || res.records || [],
+            totalElements: res.totalElements ?? res.total ?? 0,
+            totalPages: res.totalPages ?? res.pages ?? 0,
+          });
+          setError(null);
+        })
+        .catch((err) => setError(err))
+        .finally(() => setLoading(false));
+    } else {
+      client.get(`/articles?page=${page}&size=${size}`)
+        .then((res) => {
+          setData({
+            content: res.content || res.records || [],
+            totalElements: res.totalElements ?? res.total ?? 0,
+            totalPages: res.totalPages ?? res.pages ?? 0,
+          });
+          setError(null);
+        })
+        .catch((err) => setError(err))
+        .finally(() => setLoading(false));
+    }
+  }, [page, size, category, tag, keyword]);
 
   return { ...data, loading, error };
 }

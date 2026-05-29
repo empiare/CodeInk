@@ -1,8 +1,8 @@
 export default function About() {
   return (
-    <div className="container container--narrow">
-      <div className="about-content">
-        <h1 className="section-header" style={{ marginTop: '2rem' }}>关于</h1>
+    <div className="max-w-3xl mx-auto px-6">
+      <div className="pt-10 pb-0">
+        <h1 className="text-lg font-semibold text-stone-900 dark:text-stone-200 tracking-tight my-10 mx-0">关于</h1>
         <div className="article-body">
           <p>
             你好，我是这个博客的作者。这里是我记录技术学习笔记、项目经验和偶尔个人思考的地方。

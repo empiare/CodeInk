@@ -10,14 +10,13 @@ export default function CategoryPage() {
   const { content: articles, totalPages, loading } = useArticles({ page, size: 10, category: slug });
 
   return (
-    <div className="container">
-      <h1 className="section-header" style={{ marginTop: '2rem' }}>分类：{slug}</h1>
-      {loading ? (
-        <div className="loading">加载中...</div>
-      ) : articles.length === 0 ? (
-        <div className="empty">该分类下暂无文章</div>
-      ) : (
-        <div className="article-list">
+    <div className="max-w-6xl mx-auto px-6">
+      <h1 className="text-lg font-semibold text-stone-900 dark:text-stone-200 tracking-tight my-10 mx-0">分类：{slug}</h1>
+      {!loading && articles.length === 0 && (
+        <div className="text-center py-12 text-stone-400 dark:text-stone-500 text-[15px]">该分类下暂无文章</div>
+      )}
+      {articles.length > 0 && (
+        <div className="flex flex-col">
           {articles.map((article) => (
             <ArticleItem key={article.id} article={article} />
           ))}

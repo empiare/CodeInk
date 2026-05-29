@@ -33,34 +33,34 @@ export default function Login() {
   };
 
   return (
-    <div className="login-page">
-      <div className="login-card">
-        <h1 className="login-card__title">登录</h1>
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="w-full max-w-[320px] px-8 py-8">
+        <h1 className="font-serif text-xl font-semibold text-center mb-6">登录</h1>
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label className="form-label">邮箱</label>
+          <div className="mb-4">
+            <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 mb-1.5">邮箱</label>
             <input
               type="email"
-              className="form-input"
+              className="w-full px-3 py-2 text-sm bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded text-stone-900 dark:text-stone-200 outline-none focus:border-amber-700 dark:focus:border-amber-500 transition-colors"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="请输入邮箱"
               autoFocus
             />
           </div>
-          <div className="form-group">
-            <label className="form-label">密码</label>
+          <div className="mb-4">
+            <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 mb-1.5">密码</label>
             <input
               type="password"
-              className="form-input"
+              className="w-full px-3 py-2 text-sm bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded text-stone-900 dark:text-stone-200 outline-none focus:border-amber-700 dark:focus:border-amber-500 transition-colors"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="请输入密码"
             />
           </div>
-          {error && <p className="error-msg">{error}</p>}
-          <div className="btn-group">
-            <button type="submit" className="btn btn--primary" disabled={loading} style={{ width: '100%' }}>
+          {error && <p className="text-red-600 text-xs mt-1">{error}</p>}
+          <div className="flex gap-2 mt-4">
+            <button type="submit" className="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-sm border rounded cursor-pointer transition-all bg-amber-700 dark:bg-amber-500 border-amber-700 dark:border-amber-500 text-white hover:opacity-85 no-underline hover:no-underline w-full" disabled={loading}>
               {loading ? '登录中...' : '登录'}
             </button>
           </div>

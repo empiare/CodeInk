@@ -29,26 +29,26 @@ export default function CommentItem({ comment, replies = [], onReply }) {
   };
 
   return (
-    <div className="comment">
-      <div className="comment__header">
-        <div className="comment__author-info">
+    <div className="py-4 border-b border-stone-100 dark:border-stone-900 last:border-none">
+      <div className="flex items-baseline gap-2 mb-1.5">
+        <div className="flex items-center gap-2">
           {comment.userAvatarUrl ? (
-            <img src={comment.userAvatarUrl} alt="头像" className="comment__avatar" />
+            <img src={comment.userAvatarUrl} alt="头像" className="w-6 h-6 rounded-full object-cover" />
           ) : (
-            <div className="comment__avatar-placeholder">
+            <div className="w-6 h-6 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-400 flex items-center justify-center text-xs font-bold">
               {comment.authorName?.[0] || '?'}
             </div>
           )}
-          <span className="comment__author">{comment.authorName}</span>
+          <span className="font-semibold text-sm">{comment.authorName}</span>
         </div>
-        <span className="comment__date">{date}</span>
+        <span className="text-xs text-stone-400 dark:text-stone-500">{date}</span>
       </div>
 
-      <div className="comment__body">{comment.content}</div>
+      <div className="text-sm text-stone-600 dark:text-stone-400 leading-relaxed">{comment.content}</div>
 
-      <div className="comment__actions">
+      <div className="mt-2">
         <button
-          className="comment__reply-btn"
+          className="bg-transparent border-none text-stone-400 dark:text-stone-500 text-xs cursor-pointer p-0 hover:text-amber-700 dark:hover:text-amber-400"
           onClick={handleReplyClick}
           title={isAuthenticated ? "回复" : "登录后回复"}
         >
@@ -57,7 +57,7 @@ export default function CommentItem({ comment, replies = [], onReply }) {
       </div>
 
       {showReplyForm && (
-        <div className="comment__reply-form">
+        <div className="mt-3 p-4 bg-stone-100 dark:bg-stone-900 rounded">
           <CommentForm
             parentId={comment.id}
             onSubmit={handleReplySubmit}
@@ -66,7 +66,7 @@ export default function CommentItem({ comment, replies = [], onReply }) {
       )}
 
       {replies.length > 0 && (
-        <div className="comment__replies">
+        <div className="ml-6 border-l-2 border-stone-100 dark:border-stone-900 pl-4">
           {replies.map((reply) => (
             <CommentItem
               key={reply.id}

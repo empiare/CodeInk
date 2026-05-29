@@ -25,7 +25,7 @@ public class AiNewsService {
      * 获取分页资讯列表（前端用）
      */
     public IPage<AiNews> getVisiblePage(int page, int size) {
-        Page<AiNews> pageParam = new Page<>(page, size);
+        Page<AiNews> pageParam = new Page<>(page + 1, size);
         return aiNewsMapper.selectVisiblePage(pageParam);
     }
 
@@ -40,7 +40,7 @@ public class AiNewsService {
      * 按来源筛选
      */
     public IPage<AiNews> getBySource(String sourceKey, int page, int size) {
-        Page<AiNews> pageParam = new Page<>(page, size);
+        Page<AiNews> pageParam = new Page<>(page + 1, size);
         return aiNewsMapper.selectBySourceKey(pageParam, sourceKey);
     }
 

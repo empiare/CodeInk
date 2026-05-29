@@ -8,4 +8,5 @@ public class CategoryDTO {
     private String name;
     private String slug;
     private String description;
+    private Integer articleCount;
 }

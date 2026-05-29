@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.myblog.model.dto.ApiResponse;
 import com.myblog.model.dto.ArticleDTO;
 import com.myblog.model.dto.ArticleSummaryDTO;
+import com.myblog.model.dto.FeatureRequest;
 import com.myblog.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -71,6 +72,11 @@ public class ArticleController {
     @PutMapping("/{id}")
     public ApiResponse<ArticleDTO> update(@PathVariable Long id, @RequestBody ArticleDTO dto) {
         return ApiResponse.ok(articleService.update(id, dto));
+    }
+
+    @PutMapping("/{id}/feature")
+    public ApiResponse<ArticleDTO> feature(@PathVariable Long id, @RequestBody FeatureRequest req) {
+        return ApiResponse.ok(articleService.feature(id, req.isFeatured()));
     }
 
     @DeleteMapping("/{id}")

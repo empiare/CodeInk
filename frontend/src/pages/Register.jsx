@@ -111,81 +111,82 @@ export default function Register() {
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-card">
-        <h1 className="auth-card__title">注册</h1>
+    <div className="flex justify-center items-center min-h-[calc(100vh-200px)] py-8 px-8">
+      <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded p-8 w-full max-w-[400px] shadow-md">
+        <h1 className="text-2xl font-semibold mb-6 text-center">注册</h1>
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label className="form-label">用户名 *</label>
+          <div className="mb-4">
+            <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 mb-1.5">用户名 *</label>
             <input
               type="text"
-              className="form-input"
+              className="w-full px-3 py-2 text-sm bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded text-stone-900 dark:text-stone-200 outline-none focus:border-amber-700 dark:focus:border-amber-500 transition-colors"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="请输入用户名"
               autoFocus
             />
           </div>
-          <div className="form-group">
-            <label className="form-label">邮箱 *</label>
+          <div className="mb-4">
+            <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 mb-1.5">邮箱 *</label>
             <input
               type="email"
-              className="form-input"
+              className="w-full px-3 py-2 text-sm bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded text-stone-900 dark:text-stone-200 outline-none focus:border-amber-700 dark:focus:border-amber-500 transition-colors"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="请输入邮箱"
             />
           </div>
-          <div className="form-group">
-            <label className="form-label">昵称</label>
+          <div className="mb-4">
+            <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 mb-1.5">昵称</label>
             <input
               type="text"
-              className="form-input"
+              className="w-full px-3 py-2 text-sm bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded text-stone-900 dark:text-stone-200 outline-none focus:border-amber-700 dark:focus:border-amber-500 transition-colors"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               placeholder="可选，默认使用用户名"
             />
           </div>
-          <div className="form-group">
-            <label className="form-label">密码 *</label>
+          <div className="mb-4">
+            <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 mb-1.5">密码 *</label>
             <input
               type="password"
-              className="form-input"
+              className="w-full px-3 py-2 text-sm bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded text-stone-900 dark:text-stone-200 outline-none focus:border-amber-700 dark:focus:border-amber-500 transition-colors"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="请输入密码（至少6位）"
             />
           </div>
-          <div className="form-group">
-            <label className="form-label">确认密码 *</label>
+          <div className="mb-4">
+            <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 mb-1.5">确认密码 *</label>
             <input
               type="password"
-              className="form-input"
+              className="w-full px-3 py-2 text-sm bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded text-stone-900 dark:text-stone-200 outline-none focus:border-amber-700 dark:focus:border-amber-500 transition-colors"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="请再次输入密码"
             />
           </div>
-          {error && <p className="error-msg">{error}</p>}
-          <div className="btn-group">
+          {error && <p className="text-red-600 text-xs mt-1">{error}</p>}
+          <div className="flex gap-2 mt-4">
             <button
               type="submit"
-              className="btn btn--primary"
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-sm border rounded cursor-pointer transition-all bg-amber-700 dark:bg-amber-500 border-amber-700 dark:border-amber-500 text-white hover:opacity-85 w-full"
               disabled={loading}
-              style={{ width: '100%' }}
             >
               {loading ? '注册中...' : '注册'}
             </button>
           </div>
         </form>
 
-        <div className="auth-divider">
-          <span>或</span>
+        <div className="flex items-center my-6 text-stone-400 dark:text-stone-500 text-sm">
+          <span className="flex-1 h-px bg-stone-200 dark:bg-stone-800" />
+          <span className="px-4">或</span>
+          <span className="flex-1 h-px bg-stone-200 dark:bg-stone-800" />
         </div>
 
-        <div ref={googleButtonRef} className="google-button-container"></div>
+        <div ref={googleButtonRef} className="flex justify-center my-2"></div>
 
-        <div className="auth-card__footer">
+        <div className="text-center mt-4 text-sm text-stone-600 dark:text-stone-400">
           <span>已有账号？</span>
           <Link to="/login">立即登录</Link>
         </div>
