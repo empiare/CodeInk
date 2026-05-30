@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    username: root
+    password: ${DB_PASSWORD}
+  sql:
+    init:
+      mode: never
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+
+jwt:
+  secret: ${JWT_SECRET}
+
+# OAuth2 回调地址（生产环境）
+app:
+  oauth2:
+    redirect-uri: ${OAUTH2_REDIRECT_URI:http://47.108.68.180/auth/callback}
+
+# 头像配置
+avatar:
+  upload-dir: ${AVATAR_UPLOAD_DIR:/var/www/blog/uploads/avatars}
+  base-url: ${AVATAR_BASE_URL:http://47.108.68.180/avatar/}
+
+# AI资讯翻译配置
+ai-news:
+  translation:
+    baidu:
+      app-id: ${BAIDU_TRANSLATE_APP_ID}
+      secret-key: ${BAIDU_TRANSLATE_SECRET_KEY}

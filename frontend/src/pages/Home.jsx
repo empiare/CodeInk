@@ -219,7 +219,7 @@ export default function Home() {
           <aside className="max-md:hidden sticky top-[4.5rem] w-[320px] shrink-0 self-start flex flex-col gap-2 px-4 py-6 bg-white dark:bg-stone-900 border-l border-stone-900/[0.06] dark:border-white/[0.04] rounded-2xl max-h-[calc(100vh-5rem)] overflow-y-auto mt-[48px] mb-[48px]">
             <div className="px-1 py-2">
               <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 px-2.5 py-1 rounded-full">
-                AI 资讯
+                资讯
               </span>
             </div>
             {aiNews.map(news => (

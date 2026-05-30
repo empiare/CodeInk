@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -22,6 +23,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Autowired
     private UserMapper userMapper;
 
+    @Value("${app.oauth2.redirect-uri:http://localhost:3000/auth/callback}")
+    private String redirectUri;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
@@ -36,7 +40,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String token = jwtUtil.generateToken(user.getEmail());
 
-        String redirectUrl = "http://localhost:5173/auth/callback?token=" + token +
+        String redirectUrl = redirectUri + "?token=" + token +
                 "&user=" + java.net.URLEncoder.encode(user.getDisplayName(), "UTF-8") +
                 "&avatar=" + java.net.URLEncoder.encode(user.getAvatarUrl() != null ? user.getAvatarUrl() : "", "UTF-8");
 

@@ -10,6 +10,8 @@ import TagManager from './pages/TagManager';
 import UserManager from './pages/UserManager';
 import CommentManager from './pages/CommentManager';
 import TaskManager from './pages/TaskManager';
+import AiNewsManager from './pages/AiNewsManager';
+import AiNewsEditor from './pages/AiNewsEditor';
 
 export default function App() {
   return (
@@ -26,6 +28,8 @@ export default function App() {
             <Route path="tags" element={<TagManager />} />
             <Route path="users" element={<UserManager />} />
             <Route path="comments" element={<CommentManager />} />
+            <Route path="ai-news" element={<AiNewsManager />} />
+            <Route path="ai-news/:id/edit" element={<AiNewsEditor />} />
             <Route path="tasks" element={<TaskManager />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />

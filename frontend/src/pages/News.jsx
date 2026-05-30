@@ -226,16 +226,16 @@ export default function News() {
               href={news.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group block bg-white dark:bg-stone-900 border border-stone-900/[0.06] dark:border-white/[0.06] rounded-2xl p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.2)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] hover:-translate-y-0.5 transition-all duration-300 no-underline text-inherit"
+              className="group flex flex-col bg-white dark:bg-stone-900 border border-stone-900/[0.06] dark:border-white/[0.06] rounded-2xl p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.2)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] hover:-translate-y-0.5 transition-all duration-300 no-underline text-inherit"
             >
-              <span className="inline-block text-xs font-medium px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-200/50 dark:border-amber-500/20 mb-3">{news.sourceName}</span>
+              <span className="inline-block text-xs font-medium px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-200/50 dark:border-amber-500/20 mb-3 self-start">{news.sourceName}</span>
               <h3 className="text-base font-semibold text-stone-900 dark:text-stone-100 line-clamp-2 mb-2 leading-snug group-hover:text-amber-700 dark:group-hover:text-amber-400 transition-colors">{news.title}</h3>
               {news.summary && (
                 <p className="text-sm text-stone-500 dark:text-stone-400 line-clamp-3 mb-4 leading-relaxed">{news.summary}</p>
               )}
-              <div className="pt-3 border-t border-stone-100 dark:border-stone-800/50">
+              <div className="pt-3 border-t border-stone-100 dark:border-stone-800/50 mt-auto">
                 <span className="text-xs text-stone-400 dark:text-stone-500">
-                  {news.publishedAt ? new Date(news.publishedAt).toLocaleDateString('zh-CN') : ''}
+                  {news.publishedAt ? new Date(news.publishedAt).toLocaleString('zh-CN') : ''}
                 </span>
               </div>
             </a>

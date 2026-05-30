@@ -1,6 +1,6 @@
 import { Outlet, NavLink, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, FileText, FolderOpen, Tags, Users, MessageSquare, LogOut, ExternalLink, Clock } from 'lucide-react';
+import { LayoutDashboard, FileText, FolderOpen, Tags, Users, MessageSquare, LogOut, ExternalLink, Clock, Newspaper } from 'lucide-react';
 
 export default function AdminLayout() {
   const { isAuthenticated, loading, logout } = useAuth();
@@ -49,6 +49,10 @@ export default function AdminLayout() {
           <NavLink to="/comments" className={navLinkClass}>
             <MessageSquare size={16} />
             评论管理
+          </NavLink>
+          <NavLink to="/ai-news" className={navLinkClass}>
+            <Newspaper size={16} />
+            资讯管理
           </NavLink>
           <NavLink to="/tasks" className={navLinkClass}>
             <Clock size={16} />

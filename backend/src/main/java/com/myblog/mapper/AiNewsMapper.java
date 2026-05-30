@@ -60,4 +60,21 @@ public interface AiNewsMapper extends BaseMapper<AiNews> {
 
     @Select("SELECT id, title FROM ai_news WHERE is_deleted = 0 AND is_visible = 1")
     List<AiNews> selectVisibleForTranslation();
+
+    @Select("<script>" +
+            "SELECT * FROM ai_news WHERE 1=1 " +
+            "<if test='showDeleted == false'> AND is_deleted = 0</if>" +
+            "<if test='startDate != null and startDate != \"\"'> AND published_at &gt;= #{startDate}</if>" +
+            "<if test='endDate != null and endDate != \"\"'> AND published_at &lt;= #{endDate}</if>" +
+            "<if test='sourceKeys != null and sourceKeys.size() > 0'>" +
+            " AND source_key IN " +
+            "<foreach collection='sourceKeys' item='key' open='(' separator=',' close=')'>#{key}</foreach>" +
+            "</if>" +
+            " ORDER BY published_at DESC" +
+            "</script>")
+    IPage<AiNews> selectAdminPage(Page<AiNews> page,
+            @Param("startDate") String startDate,
+            @Param("endDate") String endDate,
+            @Param("sourceKeys") List<String> sourceKeys,
+            @Param("showDeleted") boolean showDeleted);
 }
