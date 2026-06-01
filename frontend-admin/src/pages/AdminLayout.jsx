@@ -3,10 +3,14 @@ import { useAuth } from '../context/AuthContext';
 import { LayoutDashboard, FileText, FolderOpen, Tags, Users, MessageSquare, LogOut, ExternalLink, Clock, Newspaper } from 'lucide-react';
 
 export default function AdminLayout() {
-  const { isAuthenticated, loading, logout } = useAuth();
+  const { isAuthenticated, loading, logout, user } = useAuth();
 
   if (loading) return <div className="text-center py-12 text-stone-400 dark:text-stone-500 text-sm pt-24">加载中...</div>;
   if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (user && user.role !== 'ADMIN') {
+    logout();
+    return <Navigate to="/login" replace />;
+  }
 
   const navLinkClass = ({ isActive }) =>
     `flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm no-underline transition-all duration-200 ${

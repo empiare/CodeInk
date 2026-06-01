@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class CommentService {
@@ -44,10 +45,12 @@ public class CommentService {
                 entity.setAuthorName(user.getDisplayName());
                 entity.setAuthorEmail(user.getEmail());
             }
-        }
-
-        if (entity.getParentId() != null && entity.getUserId() == null) {
-            throw new IllegalArgumentException("回复评论需要登录");
+        } else {
+            User tempUser = createTempUser();
+            entity.setUserId(tempUser.getId());
+            if (entity.getAuthorName() == null || entity.getAuthorName().trim().isEmpty()) {
+                entity.setAuthorName(tempUser.getDisplayName());
+            }
         }
 
         commentMapper.insert(entity);
@@ -76,6 +79,23 @@ public class CommentService {
             if (!currentUser.getId().equals(comment.getUserId())) throw new IllegalArgumentException("无权删除此评论");
         }
         commentMapper.deleteById(id);
+    }
+
+    private User createTempUser() {
+        Random random = new Random();
+        String username;
+        do {
+            int num = 100000000 + random.nextInt(900000000);
+            username = "user" + num;
+        } while (userMapper.selectByUsername(username) != null);
+
+        User tempUser = new User();
+        tempUser.setUsername(username);
+        tempUser.setEmail(username + "@temp.local");
+        tempUser.setDisplayName(username);
+        tempUser.setRole("USER");
+        userMapper.insert(tempUser);
+        return tempUser;
     }
 
     private CommentDTO toDTO(Comment c) {

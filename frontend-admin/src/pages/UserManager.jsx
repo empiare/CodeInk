@@ -91,6 +91,18 @@ export default function UserManager() {
     }
   };
 
+  const handleRoleToggle = async (user) => {
+    const newRole = user.role === 'ADMIN' ? 'USER' : 'ADMIN';
+    const action = newRole === 'ADMIN' ? '设为管理员' : '取消管理员';
+    if (!window.confirm(`确定要将 ${user.username || user.displayName} ${action}吗？`)) return;
+    try {
+      await client.put(`/admin/users/${user.id}/role`, { role: newRole });
+      fetchUsers();
+    } catch (err) {
+      alert(err?.message || '操作失败');
+    }
+  };
+
   const inputClass = "w-full px-4 py-2.5 text-sm bg-white/60 dark:bg-stone-900/50 backdrop-blur-sm border border-stone-200/70 dark:border-stone-700/50 rounded-xl text-stone-900 dark:text-stone-200 outline-none focus:border-amber-500/60 dark:focus:border-amber-500/60 focus:ring-2 focus:ring-amber-500/10 transition-all placeholder:text-stone-400 dark:placeholder:text-stone-500";
 
   return (
@@ -167,6 +179,7 @@ export default function UserManager() {
                   <th className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50 font-semibold text-stone-600 dark:text-stone-400 text-xs uppercase tracking-wider">用户名</th>
                   <th className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50 font-semibold text-stone-600 dark:text-stone-400 text-xs uppercase tracking-wider">邮箱</th>
                   <th className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50 font-semibold text-stone-600 dark:text-stone-400 text-xs uppercase tracking-wider">昵称</th>
+                  <th className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50 font-semibold text-stone-600 dark:text-stone-400 text-xs uppercase tracking-wider">角色</th>
                   <th className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50 font-semibold text-stone-600 dark:text-stone-400 text-xs uppercase tracking-wider">注册时间</th>
                   <th className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50 font-semibold text-stone-600 dark:text-stone-400 text-xs uppercase tracking-wider">操作</th>
                 </tr>
@@ -183,12 +196,28 @@ export default function UserManager() {
                     </td>
                     <td className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50 text-stone-500 dark:text-stone-400">{user.email}</td>
                     <td className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50 text-stone-500 dark:text-stone-400">{user.displayName || '-'}</td>
+                    <td className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50">
+                      {user.role === 'ADMIN' ? (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400">管理员</span>
+                      ) : (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-stone-100 dark:bg-stone-700 text-stone-600 dark:text-stone-400">普通用户</span>
+                      )}
+                    </td>
                     <td className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50 text-stone-500 dark:text-stone-400">{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : '-'}</td>
                     <td className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50">
                       <div className="flex justify-center gap-2">
                         <button className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 text-xs rounded-lg cursor-pointer transition-all bg-stone-50 dark:bg-stone-800 text-stone-600 dark:text-stone-400 border border-stone-200/70 dark:border-stone-700/50 hover:border-amber-300 dark:hover:border-amber-600 hover:text-amber-700 dark:hover:text-amber-400" onClick={() => handleEdit(user)}>
                           <Edit size={12} /> 编辑
                         </button>
+                        {user.role === 'ADMIN' ? (
+                          <button className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 text-xs rounded-lg cursor-pointer transition-all text-orange-600 dark:text-orange-400 border border-orange-200/50 dark:border-orange-500/20 hover:bg-orange-50 dark:hover:bg-orange-500/10" onClick={() => handleRoleToggle(user)}>
+                            取消管理员
+                          </button>
+                        ) : (
+                          <button className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 text-xs rounded-lg cursor-pointer transition-all text-amber-600 dark:text-amber-400 border border-amber-200/50 dark:border-amber-500/20 hover:bg-amber-50 dark:hover:bg-amber-500/10" onClick={() => handleRoleToggle(user)}>
+                            设为管理员
+                          </button>
+                        )}
                         <button className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 text-xs rounded-lg cursor-pointer transition-all text-red-600 dark:text-red-400 border border-red-200/50 dark:border-red-500/20 hover:bg-red-50 dark:hover:bg-red-500/10" onClick={() => handleDelete(user.id)}>
                           <Trash2 size={12} /> 删除
                         </button>

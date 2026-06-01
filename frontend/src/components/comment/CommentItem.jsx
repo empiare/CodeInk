@@ -5,7 +5,7 @@ import client from '../../api/client';
 import CommentForm from './CommentForm';
 
 export default function CommentItem({ comment, replies = [], onReply, onDelete }) {
-  const { isAuthenticated, user } = useAuth();
+  const { user } = useAuth();
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [modalState, setModalState] = useState(null);
@@ -20,10 +20,6 @@ export default function CommentItem({ comment, replies = [], onReply, onDelete }
     : '';
 
   const handleReplyClick = () => {
-    if (!isAuthenticated) {
-      window.location.href = '/login';
-      return;
-    }
     setShowReplyForm(!showReplyForm);
   };
 
@@ -73,9 +69,9 @@ export default function CommentItem({ comment, replies = [], onReply, onDelete }
         <button
           className="bg-transparent border-none text-stone-400 dark:text-stone-500 text-xs cursor-pointer p-0 hover:text-amber-700 dark:hover:text-amber-400 transition-colors"
           onClick={handleReplyClick}
-          title={isAuthenticated ? "回复" : "登录后回复"}
+          title="回复"
         >
-          {isAuthenticated ? '回复' : '登录后回复'}
+          回复
         </button>
         {user && comment.userId === user.id && (
           <button

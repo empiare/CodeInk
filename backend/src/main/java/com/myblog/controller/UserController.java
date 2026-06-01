@@ -104,4 +104,10 @@ public class UserController {
         userService.deleteUser(id);
         return ApiResponse.ok(null);
     }
+
+    @PutMapping("/admin/users/{id}/role")
+    public ApiResponse<Void> updateRole(@PathVariable Long id, @RequestBody Map<String, String> body) {
+        userService.updateUserRole(id, body.get("role"));
+        return ApiResponse.ok(null);
+    }
 }

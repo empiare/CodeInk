@@ -14,16 +14,6 @@ export default function CommentForm({ onSubmit, parentId = null }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (isReply && !isAuthenticated) {
-      setError('回复评论需要登录');
-      return;
-    }
-
-    if (!isReply && !isAuthenticated && !name.trim()) {
-      setError('请填写昵称');
-      return;
-    }
-
     if (!content.trim()) {
       setError('评论内容不能为空');
       return;
@@ -33,7 +23,7 @@ export default function CommentForm({ onSubmit, parentId = null }) {
     setSubmitting(true);
     try {
       await onSubmit({
-        authorName: isAuthenticated ? user.displayName : name.trim(),
+        authorName: isAuthenticated ? user.displayName : (name.trim() || ''),
         authorEmail: isAuthenticated ? user.email : (email.trim() || null),
         content: content.trim(),
         parentId,
@@ -59,18 +49,12 @@ export default function CommentForm({ onSubmit, parentId = null }) {
       )}
 
       <form onSubmit={handleSubmit}>
-        {isReply && !isAuthenticated && (
-          <div className="p-3 bg-amber-50 dark:bg-amber-500/10 rounded-xl mb-3 text-sm text-amber-700 dark:text-amber-400">
-            <p>回复评论需要登录，<a href="/login">点击登录</a></p>
-          </div>
-        )}
-
-        {!isAuthenticated && !isReply && (
+        {!isAuthenticated && (
           <div className="flex gap-3 mb-3">
             <input
               type="text"
               className={inputClass}
-              placeholder="昵称 *"
+              placeholder="昵称（可选）"
               value={name}
               onChange={(e) => setName(e.target.value)}
               maxLength={50}
@@ -103,7 +87,6 @@ export default function CommentForm({ onSubmit, parentId = null }) {
           value={content}
           onChange={(e) => setContent(e.target.value)}
           maxLength={2000}
-          disabled={isReply && !isAuthenticated}
         />
 
         {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
@@ -111,7 +94,7 @@ export default function CommentForm({ onSubmit, parentId = null }) {
         <button
           type="submit"
           className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 mt-3 text-sm font-medium bg-gradient-to-b from-amber-600 to-amber-700 dark:from-amber-500 dark:to-amber-600 text-white border-none rounded-xl cursor-pointer shadow-sm hover:from-amber-700 hover:to-amber-800 dark:hover:from-amber-400 dark:hover:to-amber-500 hover:shadow-md active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-          disabled={submitting || (isReply && !isAuthenticated)}
+          disabled={submitting}
         >
           {submitting ? '提交中...' : (isReply ? '回复' : '发表评论')}
         </button>

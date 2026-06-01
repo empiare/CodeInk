@@ -83,6 +83,25 @@ public class UserService {
         userMapper.deleteById(id);
     }
 
+    public void updateUserRole(Long id, String role) {
+        if (!"ADMIN".equals(role) && !"USER".equals(role)) {
+            throw new IllegalArgumentException("无效的角色");
+        }
+        User user = userMapper.selectById(id);
+        if (user == null) {
+            throw new IllegalArgumentException("用户不存在");
+        }
+        if ("USER".equals(role) && "ADMIN".equals(user.getRole())) {
+            Long adminCount = userMapper.selectCount(
+                    new LambdaQueryWrapper<User>().eq(User::getRole, "ADMIN"));
+            if (adminCount <= 1) {
+                throw new IllegalArgumentException("不能取消最后一个管理员");
+            }
+        }
+        user.setRole(role);
+        userMapper.updateById(user);
+    }
+
     public User getUserByEmail(String email) {
         return userMapper.selectByEmail(email);
     }

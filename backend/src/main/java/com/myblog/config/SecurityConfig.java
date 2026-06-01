@@ -21,7 +21,8 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/admin/**").authenticated()
+                .requestMatchers("/api/admin/auth/login").permitAll()
+                .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/articles/*/view").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/page-visit").permitAll()
@@ -30,7 +31,6 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/login").permitAll()
                 .requestMatchers("/api/auth/register").permitAll()
                 .requestMatchers("/api/auth/google").permitAll()
-                .requestMatchers("/api/admin/auth/login").permitAll()
                 .requestMatchers("/avatar/**").permitAll()
                 .anyRequest().authenticated()
             )

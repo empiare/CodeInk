@@ -35,6 +35,10 @@ build/
 .env.local
 .env.*.local
 
+# Deploy
+deploy/
+
+
 # Spring Boot sensitive config
 application-dev.yml
 

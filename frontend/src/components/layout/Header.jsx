@@ -55,6 +55,15 @@ export default function Header() {
           <NavLink to="/news" className={navLinkClass}>资讯</NavLink>
           <NavLink to="/about" className={navLinkClass}>关于</NavLink>
 
+          {isAuthenticated && user?.role === 'ADMIN' && (
+            <a
+              href="/admin/"
+              className="inline-flex items-center gap-1.5 text-sm text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 no-underline transition-colors"
+            >
+              后台管理
+            </a>
+          )}
+
           <form onSubmit={handleSearch} className="relative w-48">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
             <input

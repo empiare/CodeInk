@@ -57,7 +57,7 @@ public class AuthService {
         if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
             throw new IllegalArgumentException("邮箱或密码错误");
         }
-        String token = jwtUtil.generateToken(user.getEmail());
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
         Map<String, Object> result = new HashMap<>();
         result.put("token", token);
         result.put("user", buildUserInfo(user));
@@ -72,7 +72,7 @@ public class AuthService {
         if (!"ADMIN".equals(user.getRole())) {
             throw new IllegalArgumentException("无权限访问管理后台");
         }
-        String token = jwtUtil.generateToken(user.getEmail());
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
         Map<String, Object> result = new HashMap<>();
         result.put("token", token);
         result.put("user", buildUserInfo(user));
@@ -118,7 +118,7 @@ public class AuthService {
                 }
             }
 
-            String token = jwtUtil.generateToken(user.getEmail());
+            String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
             Map<String, Object> result = new HashMap<>();
             result.put("token", token);
             result.put("user", buildUserInfo(user));
