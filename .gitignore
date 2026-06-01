@@ -52,3 +52,7 @@ desktop.ini
 
 # Session files
 *.session.sql
+
+.trae/
+.qoder/
+.vscode/
