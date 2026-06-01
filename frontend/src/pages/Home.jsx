@@ -100,7 +100,7 @@ export default function Home() {
             {categories.length > 0 && (
               <>
                 <div className="px-1 py-2">
-                  <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 px-2.5 py-1 rounded-full">
+                  <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 px-2.5 py-1 rounded-full">
                     分类
                   </span>
                 </div>
@@ -108,14 +108,14 @@ export default function Home() {
                   <Link
                     key={cat.id}
                     to={`/category/${cat.slug}`}
-                    className="group flex items-center justify-between px-3 py-2 rounded-lg hover:bg-stone-50 dark:hover:bg-white/[0.03] transition-all duration-200 no-underline text-stone-900 dark:text-stone-100 text-xs hover:text-stone-900 dark:hover:text-stone-100 hover:no-underline"
+                    className="group flex items-center justify-between px-3 py-2 rounded-lg hover:bg-stone-50 dark:hover:bg-white/[0.03] transition-all duration-200 no-underline text-stone-900 dark:text-stone-100 text-sm hover:text-stone-900 dark:hover:text-stone-100 hover:no-underline"
                   >
                     <span className="font-medium">{cat.name}</span>
                     <span className="flex items-center gap-1.5">
-                      <span className="text-xs text-stone-400 dark:text-stone-600 tabular-nums">
+                      <span className="text-sm text-stone-400 dark:text-stone-600 tabular-nums">
                         {cat.articleCount ?? 0}
                       </span>
-                      <ArrowRight size={12} className="text-stone-300 dark:text-stone-600 group-hover:text-amber-500 group-hover:translate-x-0.5 transition-all" />
+                      <ArrowRight size={14} className="text-stone-300 dark:text-stone-600 group-hover:text-amber-500 group-hover:translate-x-0.5 transition-all" />
                     </span>
                   </Link>
                 ))}
@@ -124,7 +124,7 @@ export default function Home() {
             {tags.length > 0 && (
               <>
                 <div className="px-1 py-2 mt-2">
-                  <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 px-2.5 py-1 rounded-full">
+                  <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 px-2.5 py-1 rounded-full">
                     标签
                   </span>
                 </div>
@@ -138,7 +138,7 @@ export default function Home() {
             {featuredArticles.length > 0 && (
               <>
                 <div className="px-1 py-2 mt-2">
-                  <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 px-2.5 py-1 rounded-full">
+                  <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 px-2.5 py-1 rounded-full">
                     精选
                   </span>
                 </div>
@@ -148,10 +148,10 @@ export default function Home() {
                     to={`/articles/${article.slug}`}
                     className="group flex items-baseline gap-2 px-3 py-2 rounded-lg hover:bg-stone-50 dark:hover:bg-white/[0.03] transition-all duration-200 no-underline hover:no-underline text-stone-900 dark:text-stone-100"
                   >
-                    <span className="text-xs font-bold text-amber-600 dark:text-amber-400 min-w-[1.5rem]">
+                    <span className="text-sm font-bold text-amber-600 dark:text-amber-400 min-w-[1.5rem]">
                       {String(index + 1).padStart(2, '0')}
                     </span>
-                    <span className="text-xs font-medium leading-snug text-stone-900 dark:text-stone-100 transition-colors">
+                    <span className="text-sm font-medium leading-snug text-stone-900 dark:text-stone-100 transition-colors">
                       {article.title}
                     </span>
                   </Link>
@@ -218,7 +218,7 @@ export default function Home() {
         {aiNews.length > 0 && (
           <aside className="max-md:hidden sticky top-[4.5rem] w-[320px] shrink-0 self-start flex flex-col gap-2 px-4 py-6 bg-white dark:bg-stone-900 border-l border-stone-900/[0.06] dark:border-white/[0.04] rounded-2xl max-h-[calc(100vh-5rem)] overflow-y-auto mt-[48px] mb-[48px]">
             <div className="px-1 py-2">
-              <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 px-2.5 py-1 rounded-full">
+              <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 px-2.5 py-1 rounded-full">
                 资讯
               </span>
             </div>
@@ -230,13 +230,13 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="group flex flex-col gap-1 px-2.5 py-2 rounded-xl hover:bg-stone-50 dark:hover:bg-white/[0.03] transition-all duration-200 no-underline text-inherit"
               >
-                <span className="inline-block text-[10px] font-medium px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 self-start">
+                <span className="inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 self-start">
                   {news.sourceName}
                 </span>
-                <span className="text-[13px] font-medium leading-snug text-stone-700 dark:text-stone-300 group-hover:text-stone-900 dark:group-hover:text-stone-100 transition-colors line-clamp-2">
+                <span className="text-sm font-medium leading-snug text-stone-700 dark:text-stone-300 group-hover:text-stone-900 dark:group-hover:text-stone-100 transition-colors line-clamp-2">
                   {news.title}
                 </span>
-                <span className="text-[11px] text-stone-400 dark:text-stone-500">
+                <span className="text-xs text-stone-400 dark:text-stone-500">
                   {news.publishedAt ? new Date(news.publishedAt).toLocaleDateString('zh-CN') : ''}
                 </span>
               </a>

@@ -165,6 +165,14 @@ public class ArticleService {
         articleMapper.deleteById(id);
     }
 
+    @Transactional
+    public void deleteBatch(List<Long> ids) {
+        for (Long id : ids) {
+            articleTagMapper.deleteByArticleId(id);
+            articleMapper.deleteById(id);
+        }
+    }
+
     private void saveArticleTags(Long articleId, List<Long> tagIds) {
         if (tagIds == null) return;
         for (Long tagId : tagIds) {

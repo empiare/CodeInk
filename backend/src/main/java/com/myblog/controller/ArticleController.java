@@ -89,4 +89,10 @@ public class ArticleController {
         articleService.delete(id);
         return ApiResponse.ok();
     }
+
+    @DeleteMapping("/batch")
+    public ApiResponse<Void> deleteBatch(@RequestBody List<Long> ids) {
+        articleService.deleteBatch(ids);
+        return ApiResponse.ok();
+    }
 }

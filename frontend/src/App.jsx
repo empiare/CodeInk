@@ -31,12 +31,12 @@ export default function App() {
               <Route path="search" element={<SearchResults />} />
               <Route path="news" element={<News />} />
               <Route path="about" element={<About />} />
-              <Route path="login" element={<Login />} />
-              <Route path="register" element={<Register />} />
               <Route path="profile" element={<Profile />} />
-              <Route path="auth/callback" element={<AuthCallback />} />
               <Route path="*" element={<NotFound />} />
             </Route>
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+            <Route path="auth/callback" element={<AuthCallback />} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

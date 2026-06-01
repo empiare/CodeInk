@@ -1,14 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Edit, Trash2, Star } from 'lucide-react';
+import { Plus, Edit, Trash2, Star, Square, CheckSquare } from 'lucide-react';
 import client from '../api/client';
 import Pagination from '../components/common/Pagination';
+import ConfirmModal from '../components/common/ConfirmModal';
 
 export default function ArticleListAdmin() {
   const [articles, setArticles] = useState([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [selectedIds, setSelectedIds] = useState(new Set());
+  const [confirmState, setConfirmState] = useState({ open: false, message: '', resolve: null });
 
   const fetchArticles = () => {
     setLoading(true);
@@ -23,13 +26,35 @@ export default function ArticleListAdmin() {
 
   useEffect(() => { fetchArticles(); }, [page]);
 
+  useEffect(() => { setSelectedIds(new Set()); }, [page]);
+
+  const confirm = useCallback((message) => {
+    return new Promise((resolve) => {
+      setConfirmState({ open: true, message, resolve });
+    });
+  }, []);
+
   const handleDelete = async (id) => {
-    if (!window.confirm('确定要删除这篇文章吗？')) return;
+    const ok = await confirm('确定要删除这篇文章吗？');
+    if (!ok) return;
     try {
       await client.delete(`/articles/${id}`);
       fetchArticles();
     } catch {
       alert('删除失败');
+    }
+  };
+
+  const handleBatchDelete = async () => {
+    if (selectedIds.size === 0) return;
+    const ok = await confirm(`确定要删除选中的 ${selectedIds.size} 篇文章吗？此操作不可撤销。`);
+    if (!ok) return;
+    try {
+      await client.delete('/articles/batch', { data: Array.from(selectedIds) });
+      setSelectedIds(new Set());
+      fetchArticles();
+    } catch {
+      alert('批量删除失败');
     }
   };
 
@@ -42,10 +67,40 @@ export default function ArticleListAdmin() {
     }
   };
 
+  const handleSelectAll = () => {
+    if (selectedIds.size === articles.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(articles.map(a => a.id)));
+    }
+  };
+
+  const handleSelectOne = (id) => {
+    const next = new Set(selectedIds);
+    if (next.has(id)) {
+      next.delete(id);
+    } else {
+      next.add(id);
+    }
+    setSelectedIds(next);
+  };
+
+  const allSelected = articles.length > 0 && selectedIds.size === articles.length;
+
   return (
     <div>
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold mb-0 text-stone-900 dark:text-stone-100 tracking-tight">文章管理</h1>
+        <div className="flex items-center gap-4">
+          <h1 className="text-2xl font-bold mb-0 text-stone-900 dark:text-stone-100 tracking-tight">文章管理</h1>
+          {selectedIds.size > 0 && (
+            <button
+              onClick={handleBatchDelete}
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 border border-red-200/50 dark:border-red-500/20 rounded-xl hover:bg-red-50 dark:hover:bg-red-500/10 cursor-pointer transition-all"
+            >
+              <Trash2 size={14} /> 删除选中 ({selectedIds.size})
+            </button>
+          )}
+        </div>
         <Link to="/articles/new" className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 text-base font-bold bg-gradient-to-b from-amber-700 to-amber-800 dark:from-amber-600 dark:to-amber-700 text-stone-900 dark:text-stone-100 rounded-xl shadow-sm hover:from-amber-800 hover:to-amber-900 dark:hover:from-amber-500 dark:hover:to-amber-600 hover:shadow-md active:scale-[0.98] transition-all no-underline hover:no-underline">
           <Plus size={16} /> 新建文章
         </Link>
@@ -58,6 +113,11 @@ export default function ArticleListAdmin() {
           <table className="w-full border-collapse text-sm">
             <thead>
               <tr className="bg-stone-50 dark:bg-stone-800/50">
+                <th className="text-center px-3 py-3 border-b border-stone-200/50 dark:border-stone-700/50 w-10">
+                  <button onClick={handleSelectAll} className="cursor-pointer text-stone-400 dark:text-stone-500 hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+                    {allSelected ? <CheckSquare size={18} /> : <Square size={18} />}
+                  </button>
+                </th>
                 <th className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50 font-semibold text-stone-600 dark:text-stone-400 text-xs uppercase tracking-wider">标题</th>
                 <th className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50 font-semibold text-stone-600 dark:text-stone-400 text-xs uppercase tracking-wider">分类</th>
                 <th className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50 font-semibold text-stone-600 dark:text-stone-400 text-xs uppercase tracking-wider">状态</th>
@@ -68,6 +128,14 @@ export default function ArticleListAdmin() {
             <tbody>
               {articles.map((article) => (
                 <tr key={article.id} className="hover:bg-stone-50 dark:hover:bg-stone-800/30 transition-colors">
+                  <td className="text-center px-3 py-3 border-b border-stone-200/50 dark:border-stone-700/50">
+                    <button
+                      onClick={() => handleSelectOne(article.id)}
+                      className="cursor-pointer text-stone-400 dark:text-stone-500 hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
+                    >
+                      {selectedIds.has(article.id) ? <CheckSquare size={18} /> : <Square size={18} />}
+                    </button>
+                  </td>
                   <td className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50 font-medium text-stone-900 dark:text-stone-100">{article.title}</td>
                   <td className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50 text-stone-600 dark:text-stone-400">{article.category?.name || '-'}</td>
                   <td className="text-center px-4 py-3 border-b border-stone-200/50 dark:border-stone-700/50">
@@ -110,6 +178,23 @@ export default function ArticleListAdmin() {
           </div>
         </div>
       )}
+
+      <ConfirmModal
+        open={confirmState.open}
+        title="确认删除"
+        message={confirmState.message}
+        confirmText="确认删除"
+        cancelText="取消"
+        danger
+        onConfirm={() => {
+          confirmState.resolve(true);
+          setConfirmState({ open: false, message: '', resolve: null });
+        }}
+        onCancel={() => {
+          confirmState.resolve(false);
+          setConfirmState({ open: false, message: '', resolve: null });
+        }}
+      />
     </div>
   );
 }
