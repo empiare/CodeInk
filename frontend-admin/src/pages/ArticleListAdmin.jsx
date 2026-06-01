@@ -101,7 +101,7 @@ export default function ArticleListAdmin() {
             </button>
           )}
         </div>
-        <Link to="/articles/new" className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 text-base font-bold bg-gradient-to-b from-amber-700 to-amber-800 dark:from-amber-600 dark:to-amber-700 text-stone-900 dark:text-stone-100 rounded-xl shadow-sm hover:from-amber-800 hover:to-amber-900 dark:hover:from-amber-500 dark:hover:to-amber-600 hover:shadow-md active:scale-[0.98] transition-all no-underline hover:no-underline">
+        <Link to="/articles/new" className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 text-sm font-medium bg-gradient-to-b from-amber-600 to-amber-700 dark:from-amber-500 dark:to-amber-600 !text-white rounded-xl shadow-sm hover:from-amber-700 hover:to-amber-800 dark:hover:from-amber-400 dark:hover:to-amber-500 hover:shadow-md active:scale-[0.98] transition-all no-underline hover:no-underline">
           <Plus size={16} /> 新建文章
         </Link>
       </div>

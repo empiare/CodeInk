@@ -8,6 +8,8 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/myblog?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&createDatabaseIfNotExist=true
     driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   sql:
     init:
       mode: never
@@ -18,6 +20,8 @@ spring:
       client:
         registration:
           google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
             scope:
               - email
               - profile
@@ -35,15 +39,21 @@ mybatis-plus:
       logic-not-delete-value: 0
 
 jwt:
+  secret: ${JWT_SECRET}
   expiration: 86400000
 
-# 头像上传配置（环境变量优先，未设置则自动检测OS选择路径）
-avatar:
-  upload-dir: ${AVATAR_UPLOAD_DIR:}
-  base-url: ${AVATAR_BASE_URL:}
+app:
+  oauth2:
+    redirect-uri: ${OAUTH2_REDIRECT_URI}
 
-# AI资讯翻译配置
+avatar:
+  upload-dir: ${AVATAR_UPLOAD_DIR}
+  base-url: ${AVATAR_BASE_URL}
+
 ai-news:
   translation:
     enabled: true
     primary: baidu
+    baidu:
+      app-id: ${BAIDU_TRANSLATE_APP_ID}
+      secret-key: ${BAIDU_TRANSLATE_SECRET_KEY}

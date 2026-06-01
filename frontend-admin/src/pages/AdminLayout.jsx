@@ -20,7 +20,7 @@ export default function AdminLayout() {
     }`;
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex h-screen flex-col overflow-hidden">
       <header className="bg-white/60 dark:bg-stone-900/50 backdrop-blur-xl border-b border-stone-900/[0.06] dark:border-white/[0.04] px-6 py-3 shrink-0">
         <div className="text-lg font-bold text-stone-900 dark:text-stone-100 tracking-tight">
           Code<span className="text-amber-600 dark:text-amber-400">Ink</span>
@@ -28,7 +28,7 @@ export default function AdminLayout() {
         </div>
       </header>
       <div className="flex flex-1">
-        <aside className="w-[220px] bg-white/60 dark:bg-stone-900/50 backdrop-blur-xl border-r border-stone-900/[0.06] dark:border-white/[0.04] px-4 py-6 shrink-0 flex flex-col">
+        <aside className="w-[220px] bg-white/60 dark:bg-stone-900/50 backdrop-blur-xl border-r border-stone-900/[0.06] dark:border-white/[0.04] px-4 py-6 shrink-0 flex flex-col overflow-y-auto">
           <nav className="flex flex-col gap-1 flex-1">
           <NavLink to="/" end className={navLinkClass}>
             <LayoutDashboard size={16} />
@@ -78,7 +78,7 @@ export default function AdminLayout() {
           </button>
         </div>
       </aside>
-      <main className="flex-1 px-8 py-6 overflow-x-auto bg-stone-50 dark:bg-stone-950">
+      <main className="flex-1 px-8 py-6 overflow-auto bg-stone-50 dark:bg-stone-950">
         <Outlet />
       </main>
       </div>
